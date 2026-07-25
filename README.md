@@ -2,7 +2,7 @@
 
 Research-to-production prototype for forecasting, matching and hedging clean power across Great Britain.
 
-This repository has completed **Phase 3: public and synthetic data collection**. It contains cached public-source clients, provenance manifests and a deterministic demonstration portfolio. Feature engineering, models, API logic and product pages remain intentionally deferred to later build-pack phases.
+This repository has completed **Phase 5: research notebook framework and notebooks 00–03**. It contains cached public-source clients, a deterministic demonstration portfolio, typed domain schemas, DST-safe settlement utilities, row-preserving quality reports, CSV upload validation and four reproducible research notebooks. Feature engineering, forecasting, portfolio models, APIs and product pages remain intentionally deferred.
 
 ## Quick start
 
@@ -12,6 +12,10 @@ npm install
 python -c "import gridmatch"
 python scripts/fetch_public_data.py
 python scripts/build_demo_dataset.py
+python scripts/validate_upload.py tests/fixtures/upload_valid.csv
+python scripts/build_research_notebooks.py
+python scripts/execute_notebooks.py
+python -m pytest
 npm run build
 ```
 

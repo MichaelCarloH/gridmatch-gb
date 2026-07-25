@@ -2,58 +2,87 @@
 
 ## Current phase
 
-Phase 3 — Public and synthetic data collection: complete.
+Phase 5 — Research notebook framework and notebooks 00–03: complete.
 
-## Completed implementation
+## Preserved work and scope
 
-- Retained the Phase 2 scaffold and archived `legacy-prototype/` without modification.
-- Added the reusable retrying/cached HTTP layer, response-schema checks and source-manifest model under `src/gridmatch/clients/` and `src/gridmatch/data/`.
-- Added DESNZ REPD collection, Windows-1252-aware parsing, operational filtering, `pyproj` EPSG:27700 → EPSG:4326 conversion, invalid-coordinate flags and GeoJSON export.
-- Added Elexon clients for BM Unit reference data, B1610 actual generation, Market Index Data and system prices, including date parameters, pagination support, cache reuse and fixture fallback.
-- Added NESO CKAN package search, package/resource discovery, CSV download and datastore-query support with recorded package/resource IDs.
-- Added Open-Meteo weather collection with separate issue/valid times, requested variables, model name and cache key inputs.
-- Added national carbon-intensity, UK bank-holiday and Europe/London DST-transition collection.
-- Added a deterministic 12-site simulated portfolio with 180 days of half-hourly demand, solar and wind observations (103,680 rows), fixed seed, explicit units and `data_origin=simulated`.
-- Added `scripts/fetch_public_data.py`, `scripts/build_demo_dataset.py`, a portable Makefile Python selector and Windows `make.cmd` wrapper.
-- Added 11 Python tests covering deterministic generation, site mix, coverage, physical constraints, night solar, coordinate conversion, valid GeoJSON, cache reuse, manifests, origins and fixture fallback.
+- All completed Phase 3 public/simulated pipelines and Phase 4 schemas, settlement utilities, validation logic, tests and generated data artifacts remain intact.
+- `legacy-prototype/` remains archived and unchanged.
+- No feature engineering, model training, portfolio forecasting, renewable matching, hedge modelling, API routes or frontend product pages were started.
 
-## Generated artifacts
+## Completed Phase 5 implementation
 
-- `data/processed/repd_operational_sites.parquet` — 3,100 operational sites; 3,096 valid coordinates.
-- `public/demo-data/repd_operational_sites.geojson` — 3,096 map-ready point features.
-- `data/processed/bm_units.parquet` — 3,041 records.
-- `data/processed/public_generation.parquet` — 9,168 B1610 records.
-- `data/processed/prices.parquet` — 58 market/system-price records.
-- `data/processed/neso_demand_demo.parquet` — 96 records.
-- `data/processed/weather.parquet` — 48 records with distinct issue and valid times.
-- `data/processed/carbon_intensity.parquet` — 48 records.
-- `data/processed/calendar.parquet` — 20 bank-holiday/DST records.
-- `data/demo/sites.parquet` — 12 simulated sites.
-- `data/demo/observations.parquet` — 103,680 UTC half-hourly records.
-- `data/demo/site_metadata.json` — deterministic seed, units, schema and site metadata.
-- `data/manifests/*.json` — 10 public/simulated provenance manifests.
+- `src/gridmatch/research/common.py`: shared deterministic chart style and CSV artifact writer.
+- `src/gridmatch/research/market.py`: worked 46/48/50 settlement-day, imbalance and point-versus-probabilistic examples.
+- `src/gridmatch/research/assets.py`: reusable REPD technology, capacity, project-size, region, coordinate-quality and map summaries.
+- `src/gridmatch/research/profiles.py`: reusable archetype, weekday/weekend half-hour profile, capacity-factor, missingness, quality-flag and score-distribution summaries.
+- `src/gridmatch/research/weather.py`: weather-variable availability, coordinate-distance and demand/solar/wind methodology tables.
+- `scripts/build_research_notebooks.py`: deterministic source-notebook builder.
+- `scripts/execute_notebooks.py`: ordered, fail-fast execution using a repository-local kernelspec pinned to the active interpreter; writes executed copies, timings, status and the JSON index.
+- `pyproject.toml`: adds Matplotlib, nbformat, nbclient and ipykernel execution dependencies.
+- `tests/python/test_notebooks.py`: six tests for notebook contracts, cached-data use, index schema, error-free execution, artifacts and public/simulated disclosure.
+
+## Notebook and research outputs
+
+Source notebooks:
+
+- `notebooks/00_gb_market_and_settlement.ipynb`
+- `notebooks/01_site_map_and_public_assets.ipynb`
+- `notebooks/02_data_quality_and_site_profiles.ipynb`
+- `notebooks/03_weather_features.ipynb`
+
+Executed copies and index:
+
+- `artifacts/notebooks/00_gb_market_and_settlement.executed.ipynb`
+- `artifacts/notebooks/01_site_map_and_public_assets.executed.ipynb`
+- `artifacts/notebooks/02_data_quality_and_site_profiles.executed.ipynb`
+- `artifacts/notebooks/03_weather_features.executed.ipynb`
+- `artifacts/notebooks/notebook_index.json`
+
+Research summaries:
+
+- `research/01_gb_market_primer.md`
+- `research/02_data_source_audit.md`
+- `research/03_data_quality_findings.md`
+- `research/04_weather_and_leakage.md`
+
+Generated evidence:
+
+- Eight figures under `artifacts/figures/`: one settlement-day figure, two public-asset figures, four site-profile figures and one weather-driver figure.
+- Nineteen CSV tables under `artifacts/tables/`: settlement/imbalance, REPD, site profile/quality and weather-methodology outputs.
+- Public REPD evidence covers 3,100 operational projects, including 3,096 valid and four invalid coordinates.
+- Simulated portfolio evidence preserves all 103,680 observations and all 5,086 quality flags; 12 sites are currently `ready`, with scores from 95.55 to 99.84.
+
+## Phase 5 P0 acceptance audit
+
+- All four required notebooks begin with business purpose and operator relevance: passed.
+- Notebooks import reusable `gridmatch` modules, use cached Phase 3/4 artifacts and contain no ingestion clients or external API calls: passed.
+- Public and simulated data are explicitly distinguished in notebooks and summaries: passed.
+- GB participants, physical-versus-commercial matching, 46/48/50 settlement days, issue/delivery time, imbalance and probabilistic forecasts are covered without claiming full supplier settlement: passed.
+- REPD technology, capacity, size, region, geography and coordinate validity are analysed; two professional figures are saved: passed.
+- Archetypes, half-hour/weekday/weekend shapes, capacity factors, missingness, quality flags, score distribution and readiness are analysed; four required site-profile figures are saved: passed.
+- The 5,086 flags remain auditable and are described as review candidates, not confirmed faults: passed.
+- Weather issue/valid time, leakage, coordinate alignment, missingness and demand/solar/wind availability tables are covered without production feature generation: passed.
+- The ERA5 historical-weather versus forecast-vintage limitation is explicit: passed.
+- Execution is deterministic, ordered and fail-fast; all four executed notebooks contain no error outputs: passed.
+- Index fields, expected artifacts, summary structure and cached-ingestion boundary are test-covered: passed.
+- No Phase 5 P0 gaps remain.
 
 ## Verification evidence
 
-- `python scripts/fetch_public_data.py`: passed; a second run reported cache hits for every public response.
-- `python scripts/build_demo_dataset.py`: passed twice.
-- SHA-256 equality across consecutive synthetic runs: sites, observations and metadata all `True`.
-- `make demo-data`: passed through the Windows GNU Make wrapper.
-- `pytest`: 11 passed with no warnings.
-- `npm run build`: production compilation remains successful.
-- Artifact audit: timestamps are `datetime64[ns, UTC]`; manifest origins are exactly `public` and `simulated`.
+- `py -3 scripts/build_research_notebooks.py`: passed; generated four source notebooks.
+- `py -3 scripts/execute_notebooks.py`: passed; four notebooks executed in order and per-notebook UTC timestamps and durations were written to the index.
+- `py -3 -m pytest`: 36 passed.
+- `cmd /c npm run build`: passed; Next.js compiled, type-checked and generated four static pages.
+- Visual audit: settlement, REPD capacity/geography, site-profile and weather figures render legibly and support the accompanying conclusions.
 
-## External API limitations
+## Known prototype limitations
 
-- All configured official endpoints were reachable during this run; the checked-in compact fixtures were derived from those successful responses.
-- Source schemas and availability remain external dependencies. Retries handle transient failures; schema changes fail explicitly; unavailable sources select labelled fixtures and log warnings.
-- Demonstration windows are deliberately compact and are not complete market histories.
-- Open-Meteo ERA5 archive data is historical weather, not an operational forecast-vintage archive.
-
-## Remaining Phase 3 gaps
-
-No P0 acceptance gaps remain. Optional broader histories, regional carbon queries and additional NESO/Elexon datasets are intentionally deferred; they are not required for Phase 3 acceptance.
+- REPD metadata does not imply public half-hourly generation or commercial availability.
+- The 12-site business portfolio is simulated.
+- Current Open-Meteo/ERA5 evidence is historical realised weather at one grid point, not an operational forecast-vintage archive.
+- Notebook 00 is an explanatory market primer, not a complete BSC or licensed-supplier settlement implementation.
 
 ## Next
 
-Proceed to Phase 4 (`04_DATA_MODEL_AND_VALIDATION.md`) only when explicitly requested.
+Proceed to Phase 6 only when explicitly requested.

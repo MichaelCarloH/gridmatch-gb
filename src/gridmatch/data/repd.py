@@ -70,6 +70,7 @@ def process_repd(raw_path: Path | str) -> pd.DataFrame:
     name_col = _pick(frame.columns, "site_name", "project_name")
     operator_col = _pick(frame.columns, "operator_or_applicant", "operator", "developer")
     postcode_col = _pick(frame.columns, "site_postcode", "post_code", "postcode")
+    region_col = _pick(frame.columns, "region")
     easting_col = _pick(frame.columns, "x_coordinate", "easting")
     northing_col = _pick(frame.columns, "y_coordinate", "northing")
     operational = frame[frame[status_col].astype(str).str.lower().str.contains("operational", na=False)].copy()
@@ -80,6 +81,7 @@ def process_repd(raw_path: Path | str) -> pd.DataFrame:
         "operator": operational[operator_col].astype("string"),
         "status": operational[status_col].astype("string"),
         "postcode": operational[postcode_col].astype("string"),
+        "region": operational[region_col].astype("string"),
         "easting": pd.to_numeric(operational[easting_col], errors="coerce"),
         "northing": pd.to_numeric(operational[northing_col], errors="coerce"),
     }).reset_index(drop=True)

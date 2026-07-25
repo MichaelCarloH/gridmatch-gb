@@ -5,9 +5,14 @@ Summary: Great Britain clean-power forecasting and matching prototype
 Requires-Python: >=3.11
 Description-Content-Type: text/markdown
 Requires-Dist: numpy>=1.26
+Requires-Dist: matplotlib>=3.8
+Requires-Dist: nbclient>=0.10
+Requires-Dist: nbformat>=5.10
+Requires-Dist: ipykernel>=6.29
 Requires-Dist: pandas>=2.2
 Requires-Dist: pyarrow>=15
 Requires-Dist: pyproj>=3.6
+Requires-Dist: pydantic>=2.7
 Requires-Dist: requests>=2.31
 Provides-Extra: dev
 Requires-Dist: pytest>=8.0; extra == "dev"
@@ -16,7 +21,7 @@ Requires-Dist: pytest>=8.0; extra == "dev"
 
 Research-to-production prototype for forecasting, matching and hedging clean power across Great Britain.
 
-This repository is currently in **Phase 2: repository structure**. It contains only the runnable frontend/Python scaffold and development configuration; data ingestion, models, API logic and product features are intentionally deferred to later build-pack phases.
+This repository has completed **Phase 5: research notebook framework and notebooks 00–03**. It contains cached public-source clients, a deterministic demonstration portfolio, typed domain schemas, DST-safe settlement utilities, row-preserving quality reports, CSV upload validation and four reproducible research notebooks. Feature engineering, forecasting, portfolio models, APIs and product pages remain intentionally deferred.
 
 ## Quick start
 
@@ -24,6 +29,12 @@ This repository is currently in **Phase 2: repository structure**. It contains o
 python -m pip install -e ".[dev]"
 npm install
 python -c "import gridmatch"
+python scripts/fetch_public_data.py
+python scripts/build_demo_dataset.py
+python scripts/validate_upload.py tests/fixtures/upload_valid.csv
+python scripts/build_research_notebooks.py
+python scripts/execute_notebooks.py
+python -m pytest
 npm run build
 ```
 

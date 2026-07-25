@@ -1,0 +1,72 @@
+{
+  "matching_version": "renewable-matching-v1",
+  "interpretation": "Commercial/accounting renewable allocation; not physical electricity routing through the grid.",
+  "solver": [
+    "scipy-highs"
+  ],
+  "matching_modes": [
+    "maximum_match",
+    "local_preference"
+  ],
+  "settlement_periods": 626,
+  "forecast_allocation_rows": 9630,
+  "realised_allocation_rows": 9394,
+  "period_summary_rows": 2504,
+  "map_arc_rows": 19024,
+  "conservation_passed": true,
+  "phase_7_reconciliation_passed": true,
+  "analysis_basis": "local_preference",
+  "analysis": {
+    "average_forecast_renewable_match_rate": 0.6802060460258749,
+    "average_realised_renewable_match_rate": 0.6904058204171867,
+    "total_realised_residual_grid_requirement_mwh": 436.145772,
+    "total_realised_unused_generation_mwh": 336.462933,
+    "highest_consumer_renewable_coverage": {
+      "site_id": "dem_office_bristol",
+      "coverage": 0.9091468641516536
+    },
+    "lowest_consumer_renewable_coverage": {
+      "site_id": "dem_warehouse_glasgow",
+      "coverage": 0.531238232777933
+    },
+    "highest_generator_offtake_coverage": {
+      "site_id": "gen_solar_cambridge",
+      "coverage": 0.9216124719382658
+    },
+    "lowest_generator_offtake_coverage": {
+      "site_id": "gen_wind_aberdeenshire",
+      "coverage": 0.5552625367335051
+    },
+    "average_realised_matching_distance_km": 192.90195650854076,
+    "forecast_demand_constrained_periods": 219,
+    "forecast_generation_constrained_periods": 407,
+    "realised_demand_constrained_periods": 227,
+    "realised_generation_constrained_periods": 399,
+    "zero_forecast_generation_periods": 0,
+    "zero_realised_generation_periods": 3,
+    "mean_planned_vs_realised_matching_difference_mwh": 0.010966451153169958,
+    "total_planned_vs_realised_matching_difference_mwh": 6.864998421884393
+  },
+  "artifacts": {
+    "forecast_allocations": "artifacts/matching/forecast_allocations.parquet",
+    "realised_allocations": "artifacts/matching/realised_allocations.parquet",
+    "period_summary": "artifacts/matching/period_summary.parquet",
+    "consumer_summary": "artifacts/matching/consumer_summary.parquet",
+    "generator_summary": "artifacts/matching/generator_summary.parquet",
+    "allocation_comparison": "artifacts/matching/allocation_comparison.parquet",
+    "map_arcs": "artifacts/matching/map_arcs.parquet",
+    "summary": "artifacts/matching/summary.json"
+  },
+  "figures": {
+    "renewable_matching_over_time": "artifacts/figures/renewable_matching_over_time.png",
+    "consumer_renewable_coverage": "artifacts/figures/consumer_renewable_coverage.png",
+    "generator_offtake_coverage": "artifacts/figures/generator_offtake_coverage.png",
+    "matching_distance_distribution": "artifacts/figures/matching_distance_distribution.png"
+  },
+  "limitations": [
+    "Inputs are simulated out-of-sample prototype observations and forecasts.",
+    "Distance is only a commercial preference, not evidence of local physical flow.",
+    "The model omits contracts, prices, REGOs, supplier rules and network constraints.",
+    "No financial savings or hedge decisions are calculated."
+  ]
+}

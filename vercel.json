@@ -1,3 +1,10 @@
 {
-  "framework": "nextjs"
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nextjs",
+  "functions": {
+    "api/index.py": {
+      "maxDuration": 60,
+      "includeFiles": "{src/**,data/demo/sites.parquet,data/quality/annotated_observations.parquet,data/quality/site_readiness.parquet,data/processed/prices.parquet,artifacts/models/**,artifacts/forecasts/**,artifacts/metrics/**,artifacts/matching/**,artifacts/notebooks/notebook_index.json}"
+    }
+  }
 }

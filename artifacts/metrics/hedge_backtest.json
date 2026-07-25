@@ -1,0 +1,240 @@
+{
+  "hedge_model_version": "hedge-decision-v1",
+  "forecast_model": "bottom_up",
+  "settlement_periods": 626,
+  "policies_compared": [
+    "no_hedge",
+    "q50",
+    "q60",
+    "q70",
+    "q80",
+    "validation_optimised",
+    "perfect_foresight"
+  ],
+  "recommended_policy": "validation_optimised",
+  "selected_quantiles_by_fold": {
+    "1": 0.5,
+    "2": 0.1
+  },
+  "selection_history": [
+    {
+      "validation_fold": 1,
+      "selected_quantile": 0.5,
+      "selection_source": "asymmetric_cost_ratio_default",
+      "current_fold_earliest_issue_time_utc": "2025-06-15T23:00:00+00:00",
+      "evidence_rows": 0,
+      "evidence_start_utc": null,
+      "evidence_end_utc": null,
+      "candidate_total_cost_gbp": {}
+    },
+    {
+      "validation_fold": 2,
+      "selected_quantile": 0.1,
+      "selection_source": "prior_fold_realised_cost",
+      "current_fold_earliest_issue_time_utc": "2025-06-22T23:00:00+00:00",
+      "evidence_rows": 288,
+      "evidence_start_utc": "2025-06-16T23:00:00+00:00",
+      "evidence_end_utc": "2025-06-22T22:30:00+00:00",
+      "candidate_total_cost_gbp": {
+        "q10": 5133.717034477249,
+        "q20": 5164.558065602836,
+        "q30": 6216.672454800726,
+        "q40": 7572.215214418346,
+        "q50": 9112.589339265385,
+        "q60": 12067.143039957486,
+        "q70": 15052.334419049093,
+        "q80": 18054.289302050423,
+        "q90": 21070.346921560358
+      }
+    }
+  ],
+  "cost_assumptions": {
+    "short_cost_multiplier": 1.35,
+    "long_value_multiplier": 0.65,
+    "market_reference_price_gbp_mwh": 108.11414817887385,
+    "system_price_range_gbp_mwh": [
+      62.43,
+      173.88880119591917
+    ],
+    "price_data_origin": "public",
+    "price_source": "Elexon Insights snapshot",
+    "price_source_settlement_date": "2026-07-15",
+    "price_alignment_method": "non_contemporaneous_public_settlement_period_proxy"
+  },
+  "policy_metrics": [
+    {
+      "policy": "perfect_foresight",
+      "periods": 626,
+      "total_cost_gbp": 10777.125226536826,
+      "cost_difference_vs_no_hedge_gbp": -30772.689571424853,
+      "total_short_exposure_mwh": 0.0,
+      "total_long_exposure_mwh": 0.0,
+      "mean_hedged_volume_mwh": 0.15923776198083067,
+      "perfect_foresight_lower_bound": true,
+      "mean_period_cost_gbp": 17.215854994467772,
+      "cost_standard_deviation_gbp": 160.453861447013,
+      "p95_period_cost_gbp": 201.57053151863755,
+      "cvar95_period_cost_gbp": 220.19242660770993,
+      "worst_period_cost_gbp": 248.88212064636107
+    },
+    {
+      "policy": "validation_optimised",
+      "periods": 626,
+      "total_cost_gbp": 19895.96519293357,
+      "cost_difference_vs_no_hedge_gbp": -21653.849605028106,
+      "total_short_exposure_mwh": 50.2687037887211,
+      "total_long_exposure_mwh": 186.5132645998906,
+      "mean_hedged_volume_mwh": 0.37688083036928033,
+      "perfect_foresight_lower_bound": false,
+      "mean_period_cost_gbp": 31.782692001491327,
+      "cost_standard_deviation_gbp": 157.8540104207292,
+      "p95_period_cost_gbp": 215.26938166125365,
+      "cvar95_period_cost_gbp": 236.4433019405975,
+      "worst_period_cost_gbp": 264.8482251576771
+    },
+    {
+      "policy": "q50",
+      "periods": 626,
+      "total_cost_gbp": 22407.72285227474,
+      "cost_difference_vs_no_hedge_gbp": -19142.091945686938,
+      "total_short_exposure_mwh": 5.940216449896484,
+      "total_long_exposure_mwh": 299.8747282380987,
+      "mean_hedged_volume_mwh": 0.6287817105242848,
+      "perfect_foresight_lower_bound": false,
+      "mean_period_cost_gbp": 35.7950844285539,
+      "cost_standard_deviation_gbp": 151.48611473970226,
+      "p95_period_cost_gbp": 211.18326377186122,
+      "cvar95_period_cost_gbp": 228.75360026839138,
+      "worst_period_cost_gbp": 256.3201871205012
+    },
+    {
+      "policy": "q60",
+      "periods": 626,
+      "total_cost_gbp": 28831.15576798925,
+      "cost_difference_vs_no_hedge_gbp": -12718.659029972427,
+      "total_short_exposure_mwh": 3.4258412721114677,
+      "total_long_exposure_mwh": 471.3015469375475,
+      "mean_hedged_volume_mwh": 0.9066430425965433,
+      "perfect_foresight_lower_bound": false,
+      "mean_period_cost_gbp": 46.056159373784745,
+      "cost_standard_deviation_gbp": 144.35378067430315,
+      "p95_period_cost_gbp": 214.82145478962588,
+      "cvar95_period_cost_gbp": 231.49685209630766,
+      "worst_period_cost_gbp": 255.55148558562053
+    },
+    {
+      "policy": "q70",
+      "periods": 626,
+      "total_cost_gbp": 35334.05999766557,
+      "cost_difference_vs_no_hedge_gbp": -6215.754800296105,
+      "total_short_exposure_mwh": 1.9182037331810893,
+      "total_long_exposure_mwh": 643.7351032758509,
+      "mean_hedged_volume_mwh": 1.1845043746688018,
+      "perfect_foresight_lower_bound": false,
+      "mean_period_cost_gbp": 56.44418529978526,
+      "cost_standard_deviation_gbp": 137.41391513937762,
+      "p95_period_cost_gbp": 218.69643361211678,
+      "cvar95_period_cost_gbp": 234.84044706875463,
+      "worst_period_cost_gbp": 259.6783065151026
+    },
+    {
+      "policy": "no_hedge",
+      "periods": 626,
+      "total_cost_gbp": 41549.81479796168,
+      "cost_difference_vs_no_hedge_gbp": 0.0,
+      "total_short_exposure_mwh": 436.14577199999997,
+      "total_long_exposure_mwh": 336.462933,
+      "mean_hedged_volume_mwh": 0.0,
+      "perfect_foresight_lower_bound": false,
+      "mean_period_cost_gbp": 66.37350606703143,
+      "cost_standard_deviation_gbp": 152.0663278692304,
+      "p95_period_cost_gbp": 284.846435657206,
+      "cvar95_period_cost_gbp": 307.47129986266725,
+      "worst_period_cost_gbp": 394.20608619995
+    },
+    {
+      "policy": "q80",
+      "periods": 626,
+      "total_cost_gbp": 41885.95553371814,
+      "cost_difference_vs_no_hedge_gbp": 336.14073575646034,
+      "total_short_exposure_mwh": 1.05791514641245,
+      "total_long_exposure_mwh": 816.8160085663163,
+      "mean_hedged_volume_mwh": 1.4623657067410605,
+      "perfect_foresight_lower_bound": false,
+      "mean_period_cost_gbp": 66.91047209859127,
+      "cost_standard_deviation_gbp": 130.64377232984853,
+      "p95_period_cost_gbp": 223.24570373666705,
+      "cvar95_period_cost_gbp": 238.8498052551672,
+      "worst_period_cost_gbp": 264.4084199941837
+    }
+  ],
+  "validation_optimised_result": {
+    "policy": "validation_optimised",
+    "periods": 626,
+    "total_cost_gbp": 19895.96519293357,
+    "cost_difference_vs_no_hedge_gbp": -21653.849605028106,
+    "total_short_exposure_mwh": 50.2687037887211,
+    "total_long_exposure_mwh": 186.5132645998906,
+    "mean_hedged_volume_mwh": 0.37688083036928033,
+    "perfect_foresight_lower_bound": false,
+    "mean_period_cost_gbp": 31.782692001491327,
+    "cost_standard_deviation_gbp": 157.8540104207292,
+    "p95_period_cost_gbp": 215.26938166125365,
+    "cvar95_period_cost_gbp": 236.4433019405975,
+    "worst_period_cost_gbp": 264.8482251576771
+  },
+  "no_hedge_result": {
+    "policy": "no_hedge",
+    "periods": 626,
+    "total_cost_gbp": 41549.81479796168,
+    "cost_difference_vs_no_hedge_gbp": 0.0,
+    "total_short_exposure_mwh": 436.14577199999997,
+    "total_long_exposure_mwh": 336.462933,
+    "mean_hedged_volume_mwh": 0.0,
+    "perfect_foresight_lower_bound": false,
+    "mean_period_cost_gbp": 66.37350606703143,
+    "cost_standard_deviation_gbp": 152.0663278692304,
+    "p95_period_cost_gbp": 284.846435657206,
+    "cvar95_period_cost_gbp": 307.47129986266725,
+    "worst_period_cost_gbp": 394.20608619995
+  },
+  "perfect_foresight_result": {
+    "policy": "perfect_foresight",
+    "periods": 626,
+    "total_cost_gbp": 10777.125226536826,
+    "cost_difference_vs_no_hedge_gbp": -30772.689571424853,
+    "total_short_exposure_mwh": 0.0,
+    "total_long_exposure_mwh": 0.0,
+    "mean_hedged_volume_mwh": 0.15923776198083067,
+    "perfect_foresight_lower_bound": true,
+    "mean_period_cost_gbp": 17.215854994467772,
+    "cost_standard_deviation_gbp": 160.453861447013,
+    "p95_period_cost_gbp": 201.57053151863755,
+    "cvar95_period_cost_gbp": 220.19242660770993,
+    "worst_period_cost_gbp": 248.88212064636107
+  },
+  "perfect_foresight_is_lower_bound_only": true,
+  "leakage_audit_passed": true,
+  "scenario_function": "gridmatch.market.hedging.scenario_recommendation",
+  "artifacts": {
+    "hedge_recommendations": "artifacts/forecasts/hedge_recommendations.parquet",
+    "hedge_backtest": "artifacts/metrics/hedge_backtest.json",
+    "policy_backtest": "artifacts/metrics/hedge_policy_backtest.parquet",
+    "policy_metrics": "artifacts/metrics/hedge_policy_metrics.parquet",
+    "sensitivity": "artifacts/metrics/hedge_sensitivity.parquet"
+  },
+  "figures": {
+    "hedge_policy_comparison": "artifacts/figures/hedge_policy_comparison.png",
+    "hedge_recommendations_over_time": "artifacts/figures/hedge_recommendations_over_time.png",
+    "hedge_cost_sensitivity": "artifacts/figures/hedge_cost_sensitivity.png",
+    "hedge_imbalance_distribution": "artifacts/figures/hedge_imbalance_distribution.png"
+  },
+  "interpretation": "Out-of-sample volume backtest valued under an explicit public price-reference scenario; not realised supplier savings.",
+  "limitations": [
+    "The public July 2026 price snapshot does not overlap the June 2025 volume backtest.",
+    "The price curve is a scenario reference mapped by settlement period, not contemporaneous historical settlement.",
+    "The simplified signed-volume rule is not a licensed-supplier or full BSC settlement engine.",
+    "The prototype omits liquidity, gate closure, fees, credit, shape products and execution constraints.",
+    "Perfect foresight uses realised demand and is only an unattainable lower-bound benchmark."
+  ]
+}

@@ -8,7 +8,11 @@
 - [x] Complete Phase 5 research notebook framework and notebooks 00–03.
 - [x] Complete Phase 6 individual site-level forecasting models.
 - [x] Complete Phase 7 portfolio forecasting and reconciliation.
-- [ ] Complete Phases 8–12: matching, hedging, APIs, frontend and QA.
+- [x] Complete Phase 8 half-hourly renewable matching.
+- [x] Complete Phase 9 market and hedge decision engine.
+- [x] Complete Phase 10 typed API and model serving.
+- [x] Complete Phase 11 responsive artifact-backed product frontend.
+- [ ] Complete Phase 12 testing and QA.
 - [ ] Complete Phase 13 deployment verification.
 
 ## P1

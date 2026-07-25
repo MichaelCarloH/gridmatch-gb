@@ -1,0 +1,43 @@
+{
+  "generated_at_utc": "2026-07-25T15:46:17.739635+00:00",
+  "repeats": 15,
+  "results": {
+    "health": {
+      "cold_ms": 6.144,
+      "warm_mean_ms": 4.67,
+      "warm_p95_ms": 5.914,
+      "target_ms": 100.0,
+      "target_passed": true
+    },
+    "site_list": {
+      "cold_ms": 61.234,
+      "warm_mean_ms": 10.031,
+      "warm_p95_ms": 11.08,
+      "target_ms": 250.0,
+      "target_passed": true
+    },
+    "portfolio_forecast": {
+      "cold_ms": 42.476,
+      "warm_mean_ms": 40.06,
+      "warm_p95_ms": 37.778,
+      "target_ms": 500.0,
+      "target_passed": true
+    },
+    "matching_summary": {
+      "cold_ms": 3.612,
+      "warm_mean_ms": 2.109,
+      "warm_p95_ms": 2.492,
+      "target_ms": 500.0,
+      "target_passed": true
+    },
+    "hedge_scenario": {
+      "cold_ms": 20.895,
+      "warm_mean_ms": 8.085,
+      "warm_p95_ms": 8.651,
+      "target_ms": 100.0,
+      "target_passed": true
+    }
+  },
+  "all_warm_targets_passed": true,
+  "interpretation": "Local TestClient prototype benchmark; not a production SLA."
+}

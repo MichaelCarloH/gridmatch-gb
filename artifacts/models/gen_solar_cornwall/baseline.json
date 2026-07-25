@@ -1,0 +1,83 @@
+{
+  "site_id": "gen_solar_cornwall",
+  "canonical_baseline": "physical_solar",
+  "definitions": {
+    "physical_solar": "Capacity-scaled irradiance with a temperature derate and night-time zero.",
+    "persistence": "Latest generation available at the day-ahead issue time.",
+    "previous_day": "Actual energy at the forecast issue time, exactly 48 periods before valid time.",
+    "rolling_same_period": "Mean of the same UTC half-hour across the prior four weeks.",
+    "previous_week": "Actual energy 336 periods before valid time."
+  },
+  "metrics": [
+    {
+      "site_id": "gen_solar_cornwall",
+      "model_name": "physical_solar",
+      "model_type": "baseline",
+      "fold_count": 2,
+      "evaluation_rows": 626,
+      "mae": 0.009010907282943348,
+      "rmse": 0.01390993063204826,
+      "nmae": 0.0058134885696408695,
+      "bias": -0.00011753476344415856,
+      "pinball_loss": null,
+      "interval_coverage": null,
+      "interval_width": null
+    },
+    {
+      "site_id": "gen_solar_cornwall",
+      "model_name": "persistence",
+      "model_type": "baseline",
+      "fold_count": 2,
+      "evaluation_rows": 626,
+      "mae": 0.06220382085385878,
+      "rmse": 0.10281287347412646,
+      "nmae": 0.04013149732507018,
+      "bias": -0.0074549165024630545,
+      "pinball_loss": null,
+      "interval_coverage": null,
+      "interval_width": null
+    },
+    {
+      "site_id": "gen_solar_cornwall",
+      "model_name": "previous_day",
+      "model_type": "baseline",
+      "fold_count": 2,
+      "evaluation_rows": 626,
+      "mae": 0.06220382085385878,
+      "rmse": 0.10281287347412646,
+      "nmae": 0.04013149732507018,
+      "bias": -0.0074549165024630545,
+      "pinball_loss": null,
+      "interval_coverage": null,
+      "interval_width": null
+    },
+    {
+      "site_id": "gen_solar_cornwall",
+      "model_name": "rolling_same_period",
+      "model_type": "baseline",
+      "fold_count": 2,
+      "evaluation_rows": 626,
+      "mae": 0.07559490297619048,
+      "rmse": 0.12082235580415143,
+      "nmae": 0.04877090514592934,
+      "bias": -0.0026090039203612476,
+      "pinball_loss": null,
+      "interval_coverage": null,
+      "interval_width": null
+    },
+    {
+      "site_id": "gen_solar_cornwall",
+      "model_name": "previous_week",
+      "model_type": "baseline",
+      "fold_count": 2,
+      "evaluation_rows": 626,
+      "mae": 0.10526083700738917,
+      "rmse": 0.17034792674951826,
+      "nmae": 0.06791021742412204,
+      "bias": 0.01123806102216749,
+      "pinball_loss": null,
+      "interval_coverage": null,
+      "interval_width": null
+    }
+  ]
+}

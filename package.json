@@ -4,7 +4,9 @@
   "private": true,
   "description": "Research-to-production prototype for Great Britain energy forecasting and matching.",
   "scripts": {
-    "dev": "next dev",
+    "dev": "node scripts/dev.mjs",
+    "dev:frontend": "next dev",
+    "dev:api": ".venv/Scripts/python.exe -m uvicorn api.index:app --host 127.0.0.1 --port 8000",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

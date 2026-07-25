@@ -1,3 +1,4 @@
+fastapi<0.120,>=0.115
 numpy>=1.26
 matplotlib>=3.8
 nbclient>=0.10
@@ -10,7 +11,11 @@ pyarrow>=15
 pyproj>=3.6
 pydantic>=2.7
 requests>=2.31
+scipy>=1.13
 scikit-learn>=1.5
+python-multipart>=0.0.12
+uvicorn>=0.32
 
 [dev]
+httpx>=0.28
 pytest>=8.0

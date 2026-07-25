@@ -1,0 +1,83 @@
+{
+  "site_id": "gen_solar_cambridge",
+  "canonical_baseline": "physical_solar",
+  "definitions": {
+    "physical_solar": "Capacity-scaled irradiance with a temperature derate and night-time zero.",
+    "persistence": "Latest generation available at the day-ahead issue time.",
+    "previous_day": "Actual energy at the forecast issue time, exactly 48 periods before valid time.",
+    "rolling_same_period": "Mean of the same UTC half-hour across the prior four weeks.",
+    "previous_week": "Actual energy 336 periods before valid time."
+  },
+  "metrics": [
+    {
+      "site_id": "gen_solar_cambridge",
+      "model_name": "physical_solar",
+      "model_type": "baseline",
+      "fold_count": 2,
+      "evaluation_rows": 626,
+      "mae": 0.013068431607142859,
+      "rmse": 0.02012844146643724,
+      "nmae": 0.0062230626700680285,
+      "bias": -0.00037383750615761486,
+      "pinball_loss": null,
+      "interval_coverage": null,
+      "interval_width": null
+    },
+    {
+      "site_id": "gen_solar_cambridge",
+      "model_name": "persistence",
+      "model_type": "baseline",
+      "fold_count": 2,
+      "evaluation_rows": 626,
+      "mae": 0.07975756269499179,
+      "rmse": 0.13464961625639582,
+      "nmae": 0.0379797917595199,
+      "bias": -0.0013887051211001651,
+      "pinball_loss": null,
+      "interval_coverage": null,
+      "interval_width": null
+    },
+    {
+      "site_id": "gen_solar_cambridge",
+      "model_name": "previous_day",
+      "model_type": "baseline",
+      "fold_count": 2,
+      "evaluation_rows": 626,
+      "mae": 0.07975756269499179,
+      "rmse": 0.13464961625639582,
+      "nmae": 0.0379797917595199,
+      "bias": -0.0013887051211001651,
+      "pinball_loss": null,
+      "interval_coverage": null,
+      "interval_width": null
+    },
+    {
+      "site_id": "gen_solar_cambridge",
+      "model_name": "rolling_same_period",
+      "model_type": "baseline",
+      "fold_count": 2,
+      "evaluation_rows": 626,
+      "mae": 0.10561562672157226,
+      "rmse": 0.17222748013143124,
+      "nmae": 0.050293155581701075,
+      "bias": 0.004379020086720031,
+      "pinball_loss": null,
+      "interval_coverage": null,
+      "interval_width": null
+    },
+    {
+      "site_id": "gen_solar_cambridge",
+      "model_name": "previous_week",
+      "model_type": "baseline",
+      "fold_count": 2,
+      "evaluation_rows": 626,
+      "mae": 0.15974568263546798,
+      "rmse": 0.25207879904384245,
+      "nmae": 0.07606937268355618,
+      "bias": 0.02959858507799671,
+      "pinball_loss": null,
+      "interval_coverage": null,
+      "interval_width": null
+    }
+  ]
+}

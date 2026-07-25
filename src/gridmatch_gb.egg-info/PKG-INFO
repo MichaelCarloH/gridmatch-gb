@@ -4,6 +4,7 @@ Version: 0.1.0
 Summary: Great Britain clean-power forecasting and matching prototype
 Requires-Python: >=3.11
 Description-Content-Type: text/markdown
+Requires-Dist: fastapi<0.120,>=0.115
 Requires-Dist: numpy>=1.26
 Requires-Dist: matplotlib>=3.8
 Requires-Dist: nbclient>=0.10
@@ -16,27 +17,35 @@ Requires-Dist: pyarrow>=15
 Requires-Dist: pyproj>=3.6
 Requires-Dist: pydantic>=2.7
 Requires-Dist: requests>=2.31
+Requires-Dist: scipy>=1.13
 Requires-Dist: scikit-learn>=1.5
+Requires-Dist: python-multipart>=0.0.12
+Requires-Dist: uvicorn>=0.32
 Provides-Extra: dev
+Requires-Dist: httpx>=0.28; extra == "dev"
 Requires-Dist: pytest>=8.0; extra == "dev"
 
 # GridMatch GB
 
 Research-to-production prototype for forecasting, matching and hedging clean power across Great Britain.
 
-This repository has completed **Phase 5: research notebook framework and notebooks 00–03**. It contains cached public-source clients, a deterministic demonstration portfolio, typed domain schemas, DST-safe settlement utilities, row-preserving quality reports, CSV upload validation and four reproducible research notebooks. Feature engineering, forecasting, portfolio models, APIs and product pages remain intentionally deferred.
+This repository has completed **Phase 9: market and hedge decision engine**. It contains cached public-source clients, a deterministic demonstration portfolio, DST-safe validation, reproducible notebooks, site and portfolio forecast stacks, commercial renewable matching, and leakage-aware hedge-policy scenario analysis. APIs and product pages remain intentionally deferred.
 
 ## Quick start
 
-```bash
-python -m pip install -e ".[dev]"
+```powershell
+py -3 -m uv sync --extra dev
+.\.venv\Scripts\Activate.ps1
 npm install
-python -c "import gridmatch"
 python scripts/fetch_public_data.py
 python scripts/build_demo_dataset.py
 python scripts/validate_upload.py tests/fixtures/upload_valid.csv
 python scripts/build_research_notebooks.py
 python scripts/execute_notebooks.py
+python scripts/train_site_models.py
+python scripts/build_portfolio_forecast.py
+python scripts/build_matching_allocations.py
+python scripts/build_hedge_backtest.py
 python -m pytest
 npm run build
 ```

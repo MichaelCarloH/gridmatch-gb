@@ -2,105 +2,310 @@
 
 ## Current phase
 
-Phase 7 — Portfolio forecasting and reconciliation: complete.
+Phase 11 — Responsive artifact-backed product frontend: complete.
 
 ## Preserved work and scope
 
-- Phase 3 data pipelines, Phase 4 settlement/quality validation, Phase 5 notebooks and Phase 6 site models remain operational.
-- The deterministic demo still contains 103,680 observations, 5,086 retained quality flags and 12 ready sites with scores from 95.55 to 99.84.
-- Explicit simulated regions were added to site metadata for error attribution without advancing the seeded observation generator.
+- Phase 3 data pipelines, Phase 4 settlement and quality validation, Phase 5
+  notebooks, Phase 6 site forecasts, Phase 7 portfolio forecasts, Phase 8
+  renewable matching and Phase 9 hedge scenarios remain operational.
+- All Phase 3–9 source artifacts and results remain unchanged.
+- Training, data collection, historical backtesting and notebook execution
+  remain offline commands and are never run inside API requests.
 - `legacy-prototype/` remains archived and unchanged.
-- No renewable matching, hedge policy, API route, frontend product page or Phase 8 work was started.
+- The completed Phase 10 API contract remains unchanged and is the runtime
+  data boundary for the product.
+- Phase 12 QA and Phase 13 deployment were not started.
 
-## Completed Phase 7 implementation
+## Phase 11 product surface
 
-- `src/gridmatch/features/portfolio.py`: aggregate demand, generation and net-position targets plus issue-safe weather, calendar, lag and site-composition features.
-- `src/gridmatch/portfolio/simulation.py`: deterministic split-normal site simulations with a one-factor Gaussian dependence approximation.
-- `src/gridmatch/portfolio/metrics.py`: MAE, RMSE, nMAE, bias, peak error, probabilistic metrics and a transparent fixed-price hedge-cost proxy.
-- `src/gridmatch/portfolio/training.py`: exact bottom-up aggregation, direct models, prior-fold reconciliation weights, metrics, error attribution, figures and model artifacts.
-- `scripts/build_portfolio_forecast.py`: builds every Phase 7 output outside the web request path.
-- `tests/python/test_portfolio_models.py`: six tests for feature timing, simulation, aggregation equality, direct-model loading, reconciliation, intervals, metrics and attribution.
+Implemented P0 routes:
 
-## Portfolio methodology
+- `/`: research-backed landing page with live site, model and matching counts.
+- `/dashboard`: demand, generation, net position, hedge, uncertainty,
+  matching, scenario cost and quality alerts.
+- `/map`: 3,096 coordinate-valid operational public REPD assets from the
+  3,100-project analysis, 12 modelled portfolio sites, active commercial
+  matching arcs and the required asset filters.
+- `/sites`: searchable/filterable operational table with origin, capacity,
+  readiness and quality evidence.
+- `/sites/[siteId]`: overview, forecast, actuals, weather, anomalies, model,
+  quality and financial/ESG tabs.
+- `/forecasts`: baseline, bottom-up, direct and reconciled comparison,
+  probabilistic calibration, rolling forecasts and error attribution.
+- `/matching`: matched energy, coverage, spill, residual import, period slider
+  and generator-consumer allocation matrix.
+- `/market`: public prices, hedge distribution, policy cost comparison and
+  interactive lightweight assumption recomputation.
+- `/research`: executed notebook summaries, registry evidence, lineage, data
+  origins and limitations.
+- `/reports`: procurement, matching, generator, emissions-method,
+  forecast-performance and readiness reporting.
 
-- Definitions:
-  - demand is the sum of eight demand sites;
-  - generation is the sum of four renewable sites;
-  - net position is demand minus generation;
-  - positive net position means electricity must be procured.
-- Bottom-up point forecasts exactly sum Phase 6 site forecasts.
-- Bottom-up q10/q50/q90 intervals use 600 deterministic simulations per period, split-normal site marginals and a documented 0.35 common correlation factor.
-- Direct HistGradientBoosting point/q10/q50/q90 models are trained separately for aggregate demand, generation and net position.
-- Reconciled forecasts blend direct and bottom-up values. Fold 1 uses a documented 50/50 default; fold 2 weights are selected only from fold 1 MAE.
-- Final-fold direct weights are 0.30 for demand, 0.01 for generation and 0.03 for net position.
-- Validation uses the same two leakage-safe rolling-origin windows as Phase 6; training stops no later than the earliest forecast issue time.
+## Frontend architecture and design
 
-## Generated Phase 7 artifacts
+- `components/layout/app-shell.tsx`: responsive dark navigation shell with
+  active-route and mobile states.
+- `lib/api.ts` and `lib/use-api.ts`: configurable runtime API boundary,
+  abortable reads, stable loading/error state and retry.
+- `scripts/dev.mjs`: one-command FastAPI + Next.js development orchestration;
+  browser requests use same-origin `/api/*` rewrites, avoiding local CORS
+  and hostname mismatches.
+- `components/charts/`: dependency-free, units-aware SVG line and bar charts.
+- `components/map/gb-map.tsx`: lightweight GB projection for public/modelled
+  sites and commercial allocation arcs, using public-domain Natural Earth
+  coastline geometry rather than a decorative silhouette.
+- `components/ui/`: shared metric, badge, icon and state primitives.
+- `app/globals.css`: the Phase 11 paper/surface/ink, green, blue, amber and red
+  system, responsive grids, restrained cards and reduced-motion support.
+- No external font, chart or map runtime dependency was added.
 
-Forecasts and metrics:
+Data origins remain visible as public, simulated or uploaded. Charts label
+MWh, MW, GBP or GBP/MWh. All API-backed pages have loading, error and empty
+states. Scenario costs and matching arcs carry their required interpretation
+warnings.
 
-- `artifacts/forecasts/portfolio_forecasts.parquet` — 626 dashboard-ready out-of-sample periods with actual, baseline, bottom-up, direct and reconciled forecasts.
-- `artifacts/metrics/portfolio_metrics.json`
-- `artifacts/metrics/portfolio_metrics.parquet`
-- `artifacts/metrics/portfolio_metrics_by_fold.parquet`
-- `artifacts/metrics/site_error_contributions.parquet`
-- `artifacts/metrics/technology_error_contributions.parquet`
-- `artifacts/metrics/region_error_contributions.parquet`
-- `artifacts/metrics/site_error_correlation.parquet`
+## Phase 11 acceptance audit
 
-Direct portfolio model artifacts:
+- No placeholder product pages: passed.
+- Every P0 route consumes generated artifacts through Phase 10 endpoints or
+  the exported public REPD GeoJSON: passed.
+- Landing, dashboard, map, sites/detail, forecast lab, matching, market,
+  research and reports: passed.
+- Responsive desktop, tablet and mobile layouts: passed.
+- Visible units, origins, warnings and methodological boundaries: passed.
+- Loading, error, empty and retry states: passed.
+- Production TypeScript, lint and Next.js build: passed.
+- Phase 12 and deployment not started.
 
-- `artifacts/models/portfolio/demand/`
-- `artifacts/models/portfolio/generation/`
-- `artifacts/models/portfolio/net/`
-- `artifacts/models/portfolio/model_card.md`
+## API architecture
 
-Figures:
+The request path is:
 
-- `artifacts/figures/portfolio_comparison.png`
-- `artifacts/figures/portfolio_error_correlation_heatmap.png`
+```text
+typed FastAPI route
+→ domain service
+→ allowlisted artifact repository / saved-model cache
+→ Parquet, JSON, Markdown or Joblib artifact
+```
 
-## Observed Phase 7 evidence
+- `api/index.py`: application factory, OpenAPI description, CORS, response
+  limits and router registration.
+- `api/dependencies.py`: typed environment configuration.
+- `api/errors.py`: stable error envelopes for domain, validation and internal
+  errors.
+- `api/schemas/`: Pydantic public requests and responses.
+- `api/routes/`: thin health, site, portfolio, matching, market, upload,
+  research and model handlers.
+- `api/services/artifact_repository.py`: approved logical paths, lazy loading,
+  bounded LRU caching and modification-time invalidation.
+- `api/services/*_service.py`: filtering, mapping, validation and lightweight
+  business logic.
 
-- Best demand MAE: reconciled, approximately 0.0878 MWh.
-- Best generation MAE: aggregate physics-informed baseline, approximately 0.0585 MWh.
-- Best net-position MAE: bottom-up, approximately 0.1113 MWh.
-- Reconciliation appropriately places 97–99% weight on bottom-up renewable/net forecasts after prior-fold validation.
-- Bottom-up actual and point totals equal the underlying site aggregation.
-- Every bottom-up, direct and reconciled interval satisfies q10 ≤ q50 ≤ q90.
-- All 626 rows satisfy `training_cutoff_utc <= issue_time_utc < valid_time_utc`.
-- Site, technology and regional contributions are exported, and the 12×12 error-correlation matrix is visualised.
+## Implemented endpoints
 
-## Phase 7 P0 acceptance audit
+Health and metadata:
 
-- Bottom-up demand, generation and net forecasts exist: passed.
-- Bottom-up point totals exactly equal site aggregation: passed and computed, not assumed.
-- Portfolio intervals use a documented correlated simulation rather than summed quantiles: passed.
-- Direct demand, generation and net models exist and load: passed.
-- Reconciled forecasts and validation-selected weights exist: passed.
-- Baseline, bottom-up, direct and reconciled metrics include MAE, RMSE, bias, peak error, pinball loss, coverage and simulated hedge cost: passed.
-- Site, technology and region error contributions exist: passed.
-- Correlated forecast-error heatmap exists: passed.
-- Dashboard-ready forecast output exists: passed.
-- No Phase 7 P0 gaps remain.
+- `GET /health`
+- `GET /api/meta`
+
+Sites:
+
+- `GET /api/sites`
+- `GET /api/sites/{site_id}`
+- `GET /api/sites/{site_id}/observations`
+- `GET /api/sites/{site_id}/quality`
+- `GET /api/sites/{site_id}/forecast`
+- `GET /api/sites/{site_id}/metrics`
+- `GET /api/sites/{site_id}/alerts`
+- `GET /api/sites/{site_id}/model-card`
+
+Portfolio and map:
+
+- `GET /api/portfolio/forecast`
+- `GET /api/portfolio/metrics`
+- `GET /api/portfolio/error-attribution`
+- `GET /api/portfolio/correlation`
+- `GET /api/map/sites.geojson`
+- `GET /api/map/matching-arcs`
+
+Matching:
+
+- `GET /api/matching/summary`
+- `GET /api/matching/periods`
+- `GET /api/matching/allocations`
+- `GET /api/matching/consumers`
+- `GET /api/matching/generators`
+- `GET /api/matching/comparison`
+
+Market and hedge:
+
+- `GET /api/market/prices`
+- `GET /api/market/hedge-recommendations`
+- `GET /api/market/policy-summary`
+- `GET /api/market/sensitivity`
+- `POST /api/market/hedge-simulate`
+- `POST /api/hedge/simulate` compatibility route
+
+Upload, research and models:
+
+- `POST /api/upload/validate`
+- `GET /api/research/notebooks`
+- `GET /api/research/notebooks/{notebook_id}`
+- `GET /api/models`
+- `GET /api/models/{model_id}`
+- `POST /api/forecast/predict`
+
+OpenAPI is available at `/docs` and `/openapi.json`. The schema contains 34
+operations.
+
+## Configuration and safety
+
+- Supported environment variables:
+  - `GRIDMATCH_DATA_DIR`
+  - `GRIDMATCH_ARTIFACT_DIR`
+  - `GRIDMATCH_DEMO_MODE`
+  - `GRIDMATCH_CORS_ORIGINS`
+  - `GRIDMATCH_MAX_RESPONSE_ROWS`
+  - `GRIDMATCH_MODEL_CACHE_SIZE`
+  - `GRIDMATCH_UPLOAD_MAX_BYTES`
+- Demo mode needs no credentials and no external network access.
+- Local CORS defaults only to `http://localhost:3000`; wildcard origins are
+  ignored.
+- Required artifact availability is checked when the app is created.
+  `/health` reports `degraded`, never `healthy`, when any P0 artifact is
+  missing.
+- Response and upload sizes are bounded. Observations and 19,024 map arcs are
+  never returned wholesale by default.
+- Uploads require CSV content type and extension, are decoded as UTF-8,
+  validated in memory, previewed compactly and never permanently stored.
+- Notebook paths are allowlisted artifact links; model paths are logical
+  `model://` identifiers.
+- Errors never expose filesystem paths or stack traces.
+
+## Model registry and inference
+
+Generated:
+
+- `artifacts/models/model_registry.parquet`
+- `artifacts/models/model_registry.json`
+
+Registry contents:
+
+- 90 total estimator records.
+- 60 site estimator records across 12 sites.
+- 15 global demand/solar/wind fallback records.
+- 15 direct portfolio demand/generation/net records.
+- Every artifact path is a logical `model://` identifier.
+
+Compact prediction:
+
+- accepts one valid site, one to 48 future rows, issue time, weather fields and
+  documented lag/rolling inputs;
+- reconstructs all 41 Phase 6 features;
+- verifies timezone, half-hour alignment and Europe/London settlement period;
+- loads existing point/q10/q50/q90 models from the bounded cache;
+- applies non-negativity, capacity, night-solar and quantile-ordering rules;
+- never trains or downloads models.
+
+## Upload validation
+
+`POST /api/upload/validate` returns inferred frequency, date range, received
+and expected rows, completeness, duplicates, a bounded 0–100 score, readiness,
+anomaly counts, recommended actions and a ten-row annotated preview. It reuses
+`gridmatch.data.uploads.validate_csv_upload`.
+
+## Performance evidence
+
+Local TestClient benchmark, 15 warm repetitions:
+
+| Endpoint | Cold | Warm mean | Warm p95 | Target |
+|---|---:|---:|---:|---:|
+| Health | 6.144 ms | 4.670 ms | 5.914 ms | 100 ms |
+| Site list | 61.234 ms | 10.031 ms | 11.080 ms | 250 ms |
+| Portfolio forecast | 42.476 ms | 40.060 ms | 37.778 ms | 500 ms |
+| Matching summary | 3.612 ms | 2.109 ms | 2.492 ms | 500 ms |
+| Hedge scenario | 20.895 ms | 8.085 ms | 8.651 ms | 100 ms |
+
+All warm targets passed. These are local prototype measurements, not a
+production service-level agreement.
+
+Generated benchmark evidence:
+
+- `artifacts/metrics/api_benchmark.json`
+
+## Phase 10 P0 acceptance audit
+
+- Typed environment configuration and documented local defaults: passed.
+- Route → service → artifact repository separation: passed.
+- Lazy, bounded, modification-aware artifact cache: passed.
+- Healthy/degraded artifact and registry reporting: passed.
+- Site metadata, filtering, search and pagination: passed.
+- Bounded and date-filtered observations with quality flags: passed.
+- Site forecasts, ordered quantiles, metrics, quality, alerts and cards:
+  passed.
+- Portfolio methods, totals, intervals, metrics, attribution and correlation:
+  passed.
+- Valid site GeoJSON and filtered matching arcs: passed.
+- Forecast/realised and maximum/local matching separation: passed.
+- Matching conservation exposed and tested: passed.
+- Public prices, recommendations, policy metrics and sensitivity: passed.
+- Hedge scenario reuses the Phase 9 lightweight function and enforces
+  assumptions and a ±10 MWh operational limit: passed.
+- Safe in-memory CSV validation with size/content checks: passed.
+- Existing saved-model inference with physical constraints and no training:
+  passed.
+- Allowlisted research metadata: passed.
+- Consolidated 90-record logical model registry: passed.
+- Pydantic public schemas, ISO timestamps, units and JSON-safe numbers: passed.
+- Stable 400/404/413/415/422/500/503 error handling: passed.
+- OpenAPI descriptions, warnings and scenario disclaimers: passed.
+- Environment-only CORS allowlist and bounded responses: passed.
+- Cold/warm benchmark and all local targets: passed.
+- No Phase 10 P0 gaps remain.
 
 ## Verification evidence
 
-- `.\.venv\Scripts\python.exe scripts\build_demo_dataset.py`: passed; regions added while prior observation and quality evidence remained unchanged.
-- `.\.venv\Scripts\python.exe scripts\build_portfolio_forecast.py`: passed; 626 periods, two folds, 600 simulations per period and all required artifacts generated.
-- `.\.venv\Scripts\python.exe scripts\execute_notebooks.py`: passed; all four Phase 5 notebooks still execute.
-- `.\.venv\Scripts\python.exe -m pytest`: 49 passed without warnings.
-- `cmd /c npm run build`: passed; Next.js compiled, type-checked and generated four static pages.
-- Visual audit: comparison and correlation figures render legibly and support the recorded findings.
+- `py -3 -m uv lock`: passed; 84 packages resolved.
+- `py -3 -m uv sync --extra dev`: passed; FastAPI, Uvicorn, multipart and
+  TestClient dependencies installed.
+- `.\.venv\Scripts\python.exe scripts\build_model_registry.py`: passed; 90
+  logical model records generated.
+- `.\.venv\Scripts\python.exe -m uvicorn api.index:app --host 127.0.0.1
+  --port 8000`: started successfully.
+- Live `GET http://127.0.0.1:8000/health`: returned `healthy` with all required
+  artifacts available.
+- Uvicorn PID 29424 was verified by command line and stopped cleanly after the
+  health check.
+- `.\.venv\Scripts\python.exe scripts\benchmark_api.py`: passed; every target
+  met.
+- `.\.venv\Scripts\python.exe -m pytest`: 83 passed in 16.18 seconds without
+  warnings.
+- `.\.venv\Scripts\python.exe scripts\execute_notebooks.py`: passed; all four
+  existing notebooks executed.
+- `cmd /c npm run lint`: passed with no warnings or errors.
+- `cmd /c npm test`: 4 Phase 11 product acceptance tests passed.
+- `cmd /c npm run build`: passed; Next.js compiled, linted, type-checked and
+  generated 12 routes (ten P0 product routes plus the not-found route).
+- Production-server route smoke test: `/`, `/dashboard`, `/map`, `/sites`,
+  `/sites/dem_office_london`, `/forecasts`, `/matching`, `/market`,
+  `/research` and `/reports` all returned HTTP 200.
+- Live development proxy smoke test: health, 12 sites, 626 portfolio forecast
+  rows, matching summary and 58 public-price records loaded through port 3000.
 
 ## Known prototype limitations
 
-- Site, meter and weather inputs are simulated; results are pipeline evidence rather than production performance claims.
-- The 0.35 dependence factor is a documented approximation, not a calibrated production copula.
-- Quantile reconciliation is an approximation and requires longer calibration histories.
-- The simulated hedge-cost metric is absolute error multiplied by £75/MWh; it is not a Phase 9 hedge strategy or realised imbalance-cost estimate.
-- Direct generation and net models currently trail stronger bottom-up/physics approaches and should not replace them.
+- Portfolio, forecast, allocation and hedge-volume inputs are simulated.
+- Phase 9 prices remain a non-contemporaneous public scenario reference.
+- The artifact cache is in-process; multi-worker production deployment would
+  need shared storage/cache and observability.
+- Compact prediction requires caller-supplied lag and rolling features and
+  assumes weather inputs were available at issue time.
+- Authentication, rate limiting, distributed tracing and production object
+  storage are intentionally deferred.
+- Scenario costs are not realised savings, financial advice or executable
+  trading instructions.
 
 ## Next
 
-Proceed to Phase 8 (`08_RENEWABLE_MATCHING.md`) only when explicitly requested.
+Proceed to Phase 12 (`12_TESTING_AND_QA.md`) only when explicitly requested.

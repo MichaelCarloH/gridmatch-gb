@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useParams } from 'next/navigation';
 import { PageHeader } from '@/components/layout/page-header';
 import { LineChart } from '@/components/charts/line-chart';
 import { DataState } from '@/components/ui/data-state';
@@ -12,7 +13,8 @@ import type { Dictionary, Envelope, Site } from '@/lib/types';
 
 const tabs = ['overview', 'forecast', 'actuals', 'weather', 'anomalies', 'model', 'quality', 'financial / ESG'];
 
-export default function SiteDetailPage({ params }: { params: { siteId: string } }) {
+export default function SiteDetailPage() {
+  const params = useParams<{ siteId: string }>();
   const id = encodeURIComponent(params.siteId);
   const [tab, setTab] = useState('overview');
   const site = useApi<Envelope<Site>>(`/api/sites/${id}`);

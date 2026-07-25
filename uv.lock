@@ -487,29 +487,29 @@ source = { editable = "." }
 dependencies = [
     { name = "fastapi" },
     { name = "holidays" },
-    { name = "ipykernel" },
     { name = "joblib" },
-    { name = "matplotlib" },
-    { name = "nbclient" },
-    { name = "nbformat" },
     { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
     { name = "numpy", version = "2.5.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
     { name = "pandas" },
     { name = "pyarrow" },
     { name = "pydantic" },
-    { name = "pyproj" },
     { name = "python-multipart" },
-    { name = "requests" },
     { name = "scikit-learn" },
     { name = "scipy", version = "1.17.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
     { name = "scipy", version = "1.18.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
-    { name = "uvicorn" },
 ]
 
 [package.optional-dependencies]
 dev = [
     { name = "httpx" },
+    { name = "ipykernel" },
+    { name = "matplotlib" },
+    { name = "nbclient" },
+    { name = "nbformat" },
+    { name = "pyproj" },
     { name = "pytest" },
+    { name = "requests" },
+    { name = "uvicorn" },
 ]
 
 [package.metadata]
@@ -517,22 +517,22 @@ requires-dist = [
     { name = "fastapi", specifier = ">=0.115,<0.120" },
     { name = "holidays", specifier = ">=0.60" },
     { name = "httpx", marker = "extra == 'dev'", specifier = ">=0.28" },
-    { name = "ipykernel", specifier = ">=6.29" },
+    { name = "ipykernel", marker = "extra == 'dev'", specifier = ">=6.29" },
     { name = "joblib", specifier = ">=1.4" },
-    { name = "matplotlib", specifier = ">=3.8" },
-    { name = "nbclient", specifier = ">=0.10" },
-    { name = "nbformat", specifier = ">=5.10" },
+    { name = "matplotlib", marker = "extra == 'dev'", specifier = ">=3.8" },
+    { name = "nbclient", marker = "extra == 'dev'", specifier = ">=0.10" },
+    { name = "nbformat", marker = "extra == 'dev'", specifier = ">=5.10" },
     { name = "numpy", specifier = ">=1.26" },
     { name = "pandas", specifier = ">=2.2" },
     { name = "pyarrow", specifier = ">=15" },
     { name = "pydantic", specifier = ">=2.7" },
-    { name = "pyproj", specifier = ">=3.6" },
+    { name = "pyproj", marker = "extra == 'dev'", specifier = ">=3.6" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.0" },
     { name = "python-multipart", specifier = ">=0.0.12" },
-    { name = "requests", specifier = ">=2.31" },
+    { name = "requests", marker = "extra == 'dev'", specifier = ">=2.31" },
     { name = "scikit-learn", specifier = ">=1.5" },
     { name = "scipy", specifier = ">=1.13" },
-    { name = "uvicorn", specifier = ">=0.32" },
+    { name = "uvicorn", marker = "extra == 'dev'", specifier = ">=0.32" },
 ]
 provides-extras = ["dev"]
 

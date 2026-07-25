@@ -46,3 +46,5 @@ data/quality/site_reports/*.json
 !artifacts/tables/.gitkeep
 !artifacts/notebooks/.gitkeep
 !data/manifests/.gitkeep
+
+.vercel

@@ -22,8 +22,9 @@ Public repository:
 Existing production URL:
 [gridmatch-gb.vercel.app](https://gridmatch-gb.vercel.app)
 
-The URL may lag local Extension Phase 12–20 changes until an explicitly
-authorized commit, push and production deployment are completed.
+Extension Phases 11–20 are deployed from commit `6a2cdcc` on
+`agent/publish-gridmatch-vercel`. The production alias was verified after
+deployment on 25 July 2026.
 
 ## Start locally
 

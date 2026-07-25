@@ -55,7 +55,9 @@ and representative health/API calls in local technical mode.
 
 ## Deployment status
 
-The repository already has a public GitHub origin and Vercel URL documented in
-`README.md`. This audit does not claim that the uncommitted Extension
-Phases 12–20 are live until an explicit commit, push and production deployment
-are authorized and verified.
+Extension commit `6a2cdcc` was pushed to
+`agent/publish-gridmatch-vercel`. Vercel deployment
+`dpl_8duajTPhV7amAvTucs69uhhAPqSo` reached `READY`, was promoted to production
+and was aliased to `https://gridmatch-gb.vercel.app`. Public route and API
+checks returned HTTP 200 after deployment. Draft PR #1 remains open against
+`master`.

@@ -541,9 +541,15 @@ Generated:
   103 kB; route-specific first-load totals were 107–117 kB.
 - Responsive, reduced-motion, print, chart-label and table-caption rules are
   present.
-- The existing GitHub/Vercel publication remains documented. These local
-  extension changes were not pushed or redeployed because this implementation
-  request did not explicitly authorize external publication.
+- Extension commit `6a2cdcc` was pushed to
+  `origin/agent/publish-gridmatch-vercel`.
+- Vercel deployment `dpl_8duajTPhV7amAvTucs69uhhAPqSo` completed with
+  `READY` production status and was aliased to
+  `https://gridmatch-gb.vercel.app`.
+- Public HTTP checks returned 200 for `/`, `/demo`, `/business`, `/generator`,
+  `/operations/diversification`, `/models/performance`,
+  `/admin/data/uploads`, `/health`, `/api/sites?limit=1` and
+  `/api/portfolio/correlation`.
 
 ### Phase 20 — interview packaging
 
@@ -590,6 +596,6 @@ coding-agent statement.
 
 ## Current state
 
-Extension Phases 11–20 are complete locally. The next external action is an
-intentional commit, push and production deployment, which requires explicit
-authorization because it changes the public repository and live URL.
+Extension Phases 11–20 are complete, pushed to GitHub and deployed to the
+verified production alias. Draft PR #1 remains open against `master` for the
+intentional review and merge step.

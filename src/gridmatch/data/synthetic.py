@@ -29,10 +29,26 @@ SITE_ROWS = [
     ("gen_wind_aberdeenshire", "Dee Wind", "generation", "wind", "renewable_generator", 57.1497, -2.0943, 7.50),
 ]
 
+SITE_REGIONS = {
+    "dem_office_london": "London",
+    "dem_office_bristol": "South West England",
+    "dem_warehouse_manchester": "North West England",
+    "dem_warehouse_glasgow": "Scotland",
+    "dem_retail_birmingham": "West Midlands",
+    "dem_retail_cardiff": "Wales",
+    "dem_hospitality_edinburgh": "Scotland",
+    "dem_manufacturing_sheffield": "Yorkshire and the Humber",
+    "gen_solar_cambridge": "East of England",
+    "gen_solar_cornwall": "South West England",
+    "gen_wind_cumbria": "North West England",
+    "gen_wind_aberdeenshire": "Scotland",
+}
+
 
 def site_frame() -> pd.DataFrame:
     columns = ["site_id", "name", "site_role", "technology", "business_archetype", "latitude", "longitude", "installed_capacity_mw"]
     frame = pd.DataFrame(SITE_ROWS, columns=columns)
+    frame["region"] = frame["site_id"].map(SITE_REGIONS)
     frame["data_origin"] = "simulated"
     return frame
 

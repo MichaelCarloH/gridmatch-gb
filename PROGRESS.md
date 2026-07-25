@@ -2,104 +2,105 @@
 
 ## Current phase
 
-Phase 6 — Individual site-level forecasting models: complete.
+Phase 7 — Portfolio forecasting and reconciliation: complete.
 
 ## Preserved work and scope
 
-- Phase 3 public and simulated pipelines, Phase 4 settlement/quality validation, and Phase 5 notebooks remain operational.
-- The additional simulated wind-direction, gust and pressure fields do not advance the original seeded random generator; the prior 103,680 observations, 5,086 flags, 12 ready sites and 95.55–99.84 score range are preserved.
+- Phase 3 data pipelines, Phase 4 settlement/quality validation, Phase 5 notebooks and Phase 6 site models remain operational.
+- The deterministic demo still contains 103,680 observations, 5,086 retained quality flags and 12 ready sites with scores from 95.55 to 99.84.
+- Explicit simulated regions were added to site metadata for error attribution without advancing the seeded observation generator.
 - `legacy-prototype/` remains archived and unchanged.
-- No portfolio forecasting, reconciliation, renewable matching, hedge modelling, API routes or frontend product pages were started.
+- No renewable matching, hedge policy, API route, frontend product page or Phase 8 work was started.
 
-## Completed Phase 6 implementation
+## Completed Phase 7 implementation
 
-- `src/gridmatch/features/site.py`: 41 leakage-aware calendar, bank-holiday, weather, lag, rolling, physical and site-metadata features.
-- `src/gridmatch/models/baselines.py`: previous-day, previous-week, rolling same-period, generation persistence, physical solar and stylised wind baselines.
-- `src/gridmatch/models/site_forecasting.py`: Ridge statistical model and HistGradientBoosting point/q10/q50/q90 models with quantile repair and physical post-processing.
-- `src/gridmatch/models/metrics.py`: MAE, RMSE, nMAE, bias, pinball loss, interval coverage and interval width.
-- `src/gridmatch/models/training.py`: two-fold expanding rolling-origin training, artifact persistence, model cards, global fallbacks and strict JSON summaries.
-- `scripts/train_site_models.py`: trains all 12 demo sites and three global fallback stacks outside the web request path.
-- `tests/python/test_site_models.py`: seven tests covering issue-time safety, rolling splits, required baselines, model loading, quantiles, physical constraints, artifacts, metrics and improvement.
-- `pyproject.toml` and `uv.lock`: reproducible scikit-learn, joblib and UK-bank-holiday dependencies managed with `uv`.
+- `src/gridmatch/features/portfolio.py`: aggregate demand, generation and net-position targets plus issue-safe weather, calendar, lag and site-composition features.
+- `src/gridmatch/portfolio/simulation.py`: deterministic split-normal site simulations with a one-factor Gaussian dependence approximation.
+- `src/gridmatch/portfolio/metrics.py`: MAE, RMSE, nMAE, bias, peak error, probabilistic metrics and a transparent fixed-price hedge-cost proxy.
+- `src/gridmatch/portfolio/training.py`: exact bottom-up aggregation, direct models, prior-fold reconciliation weights, metrics, error attribution, figures and model artifacts.
+- `scripts/build_portfolio_forecast.py`: builds every Phase 7 output outside the web request path.
+- `tests/python/test_portfolio_models.py`: six tests for feature timing, simulation, aggregation equality, direct-model loading, reconciliation, intervals, metrics and attribution.
 
-## Feature and validation design
+## Portfolio methodology
 
-- Target: simulated half-hourly demand or generation energy in MWh.
-- Forecast issue convention: exactly 48 half-hour periods before each valid time.
-- Every stored forecast has issue time, valid time, horizon, settlement date/period, training cutoff, model version and feature version.
-- Each rolling fold stops training no later than the earliest forecast issue time in that fold.
-- Validation uses two expanding seven-day folds and never uses a random split.
-- Weather is treated as a forecast-weather methodology proxy; current simulated realised weather is explicitly disclosed as a limitation.
+- Definitions:
+  - demand is the sum of eight demand sites;
+  - generation is the sum of four renewable sites;
+  - net position is demand minus generation;
+  - positive net position means electricity must be procured.
+- Bottom-up point forecasts exactly sum Phase 6 site forecasts.
+- Bottom-up q10/q50/q90 intervals use 600 deterministic simulations per period, split-normal site marginals and a documented 0.35 common correlation factor.
+- Direct HistGradientBoosting point/q10/q50/q90 models are trained separately for aggregate demand, generation and net position.
+- Reconciled forecasts blend direct and bottom-up values. Fold 1 uses a documented 50/50 default; fold 2 weights are selected only from fold 1 MAE.
+- Final-fold direct weights are 0.30 for demand, 0.01 for generation and 0.03 for net position.
+- Validation uses the same two leakage-safe rolling-origin windows as Phase 6; training stops no later than the earliest forecast issue time.
 
-## Generated Phase 6 artifacts
+## Generated Phase 7 artifacts
 
-Per-site artifacts under `artifacts/models/{site_id}/` for all 12 sites:
+Forecasts and metrics:
 
-- `baseline.json`
-- `statistical.joblib`
-- `point.joblib`
-- `q10.joblib`
-- `q50.joblib`
-- `q90.joblib`
-- `metadata.json`
-- `model_card.md`
+- `artifacts/forecasts/portfolio_forecasts.parquet` — 626 dashboard-ready out-of-sample periods with actual, baseline, bottom-up, direct and reconciled forecasts.
+- `artifacts/metrics/portfolio_metrics.json`
+- `artifacts/metrics/portfolio_metrics.parquet`
+- `artifacts/metrics/portfolio_metrics_by_fold.parquet`
+- `artifacts/metrics/site_error_contributions.parquet`
+- `artifacts/metrics/technology_error_contributions.parquet`
+- `artifacts/metrics/region_error_contributions.parquet`
+- `artifacts/metrics/site_error_correlation.parquet`
 
-Global fallbacks:
+Direct portfolio model artifacts:
 
-- `artifacts/models/global_demand/`
-- `artifacts/models/global_solar/`
-- `artifacts/models/global_wind/`
+- `artifacts/models/portfolio/demand/`
+- `artifacts/models/portfolio/generation/`
+- `artifacts/models/portfolio/net/`
+- `artifacts/models/portfolio/model_card.md`
 
-Forecast and metric artifacts:
+Figures:
 
-- `artifacts/forecasts/site_forecasts.parquet` — 7,512 out-of-sample forecast rows across 12 sites and two folds.
-- `artifacts/metrics/site_metrics_by_fold.parquet` — fold-level evidence.
-- `artifacts/metrics/site_metrics.parquet` — 68 aggregate site/model comparison rows.
-- `artifacts/metrics/site_metrics.json` — strict JSON summary and per-site baseline comparison.
+- `artifacts/figures/portfolio_comparison.png`
+- `artifacts/figures/portfolio_error_correlation_heatmap.png`
 
-## Observed Phase 6 evidence
+## Observed Phase 7 evidence
 
-- All 12 sites have forecasts, a statistical model, point and q10/q50/q90 models, baseline evidence, metadata and a model card.
-- All stored estimators load and expose `predict`.
-- All 7,512 forecast rows satisfy `training_cutoff_utc <= issue_time_utc < valid_time_utc`.
-- All quantiles satisfy `q10 <= q50 <= q90`.
-- Forecast energy is non-negative; solar is zero at night; generation never exceeds installed capacity for a half-hour.
-- HistGradientBoosting improves the canonical rolling same-period baseline on all eight demand sites.
-- The physical solar and wind baselines remain slightly stronger than ML on the four renewable sites; this is retained as an honest result rather than hidden.
-- Probabilistic interval coverage across site ML models ranges from approximately 76.7% to 94.1%.
+- Best demand MAE: reconciled, approximately 0.0878 MWh.
+- Best generation MAE: aggregate physics-informed baseline, approximately 0.0585 MWh.
+- Best net-position MAE: bottom-up, approximately 0.1113 MWh.
+- Reconciliation appropriately places 97–99% weight on bottom-up renewable/net forecasts after prior-fold validation.
+- Bottom-up actual and point totals equal the underlying site aggregation.
+- Every bottom-up, direct and reconciled interval satisfies q10 ≤ q50 ≤ q90.
+- All 626 rows satisfy `training_cutoff_utc <= issue_time_utc < valid_time_utc`.
+- Site, technology and regional contributions are exported, and the 12×12 error-correlation matrix is visualised.
 
-## Phase 6 P0 acceptance audit
+## Phase 7 P0 acceptance audit
 
-- Every selected site has day-ahead point/q10/q50/q90 forecasts: passed.
-- Previous-day, previous-week, rolling same-period, persistence, physical solar and wind baselines are implemented where applicable: passed.
-- Ridge statistical and HistGradientBoosting ML models are trained per site: passed.
-- Demand, solar and wind feature requirements, including lags, rolling values, weather and metadata, are represented: passed.
-- Global demand, solar and wind fallback stacks are saved: passed.
-- Rolling-origin evaluation, versioned timing fields and all required metrics are stored: passed.
-- Per-site model artifacts load: passed.
-- Quantile ordering and physical constraints hold: passed.
-- At least one model improves on its canonical baseline; eight sites improve: passed.
-- Model cards disclose simulated data, realised-weather proxy use and production limitations: passed.
-- No Phase 6 P0 gaps remain.
+- Bottom-up demand, generation and net forecasts exist: passed.
+- Bottom-up point totals exactly equal site aggregation: passed and computed, not assumed.
+- Portfolio intervals use a documented correlated simulation rather than summed quantiles: passed.
+- Direct demand, generation and net models exist and load: passed.
+- Reconciled forecasts and validation-selected weights exist: passed.
+- Baseline, bottom-up, direct and reconciled metrics include MAE, RMSE, bias, peak error, pinball loss, coverage and simulated hedge cost: passed.
+- Site, technology and region error contributions exist: passed.
+- Correlated forecast-error heatmap exists: passed.
+- Dashboard-ready forecast output exists: passed.
+- No Phase 7 P0 gaps remain.
 
 ## Verification evidence
 
-- `py -3 -m uv lock`: passed; reproducible lockfile created.
-- `py -3 -m uv sync --extra dev`: passed; Phase 6 dependencies installed in `.venv`.
-- `.\.venv\Scripts\python.exe scripts\build_demo_dataset.py`: passed; preserved Phase 3/4 evidence and added deterministic weather fields.
-- `.\.venv\Scripts\python.exe scripts\train_site_models.py`: passed; 12 site stacks, three fallbacks and all forecast/metric artifacts generated.
+- `.\.venv\Scripts\python.exe scripts\build_demo_dataset.py`: passed; regions added while prior observation and quality evidence remained unchanged.
+- `.\.venv\Scripts\python.exe scripts\build_portfolio_forecast.py`: passed; 626 periods, two folds, 600 simulations per period and all required artifacts generated.
 - `.\.venv\Scripts\python.exe scripts\execute_notebooks.py`: passed; all four Phase 5 notebooks still execute.
-- `.\.venv\Scripts\python.exe -m pytest`: 43 passed without warnings.
+- `.\.venv\Scripts\python.exe -m pytest`: 49 passed without warnings.
 - `cmd /c npm run build`: passed; Next.js compiled, type-checked and generated four static pages.
+- Visual audit: comparison and correlation figures render legibly and support the recorded findings.
 
 ## Known prototype limitations
 
-- Site and meter data are simulated; metrics are not production-performance claims.
-- Weather inputs are simulated realised values, not archived forecast vintages.
-- The 180-day history and two validation folds are sufficient for prototype evidence, not seasonal production approval.
-- Renewable physics baselines outperform ML in current validation; model complexity should not replace them without stronger evidence.
-- Forecasts do not yet include portfolio reconciliation, matching or hedge decisions.
+- Site, meter and weather inputs are simulated; results are pipeline evidence rather than production performance claims.
+- The 0.35 dependence factor is a documented approximation, not a calibrated production copula.
+- Quantile reconciliation is an approximation and requires longer calibration histories.
+- The simulated hedge-cost metric is absolute error multiplied by £75/MWh; it is not a Phase 9 hedge strategy or realised imbalance-cost estimate.
+- Direct generation and net models currently trail stronger bottom-up/physics approaches and should not replace them.
 
 ## Next
 
-Proceed to Phase 7 (`07_PORTFOLIO_MODELS.md`) only when explicitly requested.
+Proceed to Phase 8 (`08_RENEWABLE_MATCHING.md`) only when explicitly requested.

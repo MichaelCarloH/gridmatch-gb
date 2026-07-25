@@ -2,7 +2,7 @@
 
 Research-to-production prototype for forecasting, matching and hedging clean power across Great Britain.
 
-This repository has completed **Phase 6: individual site-level forecasting models**. It contains cached public-source clients, a deterministic demonstration portfolio, DST-safe settlement and quality validation, four reproducible research notebooks, and loadable per-site baseline/statistical/probabilistic forecast stacks. Portfolio models, matching, hedging, APIs and product pages remain intentionally deferred.
+This repository has completed **Phase 7: portfolio forecasting and reconciliation**. It contains cached public-source clients, a deterministic demonstration portfolio, DST-safe validation, reproducible notebooks, site forecast stacks, correlated bottom-up portfolio intervals, direct aggregate models and validation-weighted reconciliation. Renewable matching, hedging, APIs and product pages remain intentionally deferred.
 
 ## Quick start
 
@@ -16,6 +16,7 @@ python scripts/validate_upload.py tests/fixtures/upload_valid.csv
 python scripts/build_research_notebooks.py
 python scripts/execute_notebooks.py
 python scripts/train_site_models.py
+python scripts/build_portfolio_forecast.py
 python -m pytest
 npm run build
 ```

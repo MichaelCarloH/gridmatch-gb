@@ -7,7 +7,8 @@
 - [x] Complete Phase 4 data models, settlement logic and quality validation.
 - [x] Complete Phase 5 research notebook framework and notebooks 00–03.
 - [x] Complete Phase 6 individual site-level forecasting models.
-- [ ] Complete Phases 7–12: portfolio models, matching, APIs, frontend and QA.
+- [x] Complete Phase 7 portfolio forecasting and reconciliation.
+- [ ] Complete Phases 8–12: matching, hedging, APIs, frontend and QA.
 - [ ] Complete Phase 13 deployment verification.
 
 ## P1

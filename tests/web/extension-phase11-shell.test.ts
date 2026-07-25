@@ -1,12 +1,11 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
-import { afterEach, describe, expect, test, vi } from 'vitest';
-import { apiGet } from '../../lib/api';
-import { canonicalApiPath } from '../../lib/static-fallback';
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
 const root = process.cwd();
 
 describe('Extension Phase 11 shared shell', () => {
+  beforeEach(() => vi.resetModules());
   afterEach(() => vi.unstubAllGlobals());
 
   test('all workspace roots support direct navigation', () => {
@@ -65,7 +64,7 @@ describe('Extension Phase 11 shared shell', () => {
     expect(readdirSync(join(root, 'app', 'admin'))).toContain('data');
   });
 
-  test('static fallback bundles are compact, indexed and canonical', () => {
+  test('static fallback bundles are compact, indexed and canonical', async () => {
     const fallbackRoot = join(root, 'public/demo-data/fallback');
     const index = JSON.parse(
       readFileSync(join(fallbackRoot, 'index.json'), 'utf8')
@@ -82,6 +81,7 @@ describe('Extension Phase 11 shared shell', () => {
       expect(index.routes[route], route).toBeDefined();
       expect(existsSync(join(fallbackRoot, index.routes[route].bundle))).toBe(true);
     }
+    const { canonicalApiPath } = await import('../../lib/static-fallback');
     expect(
       canonicalApiPath('/api/sites?z=2&limit=100&a=1')
     ).toBe('/api/sites?a=1&limit=100&z=2');
@@ -94,17 +94,78 @@ describe('Extension Phase 11 shared shell', () => {
       localStorage: { getItem: () => null }
     });
     vi.stubGlobal('fetch', vi.fn(async (url: string) => {
-      const name = url.split('/').at(-1) ?? '';
+      const name = url.split('?')[0].split('/').at(-1) ?? '';
       return new Response(readFileSync(join(fallbackRoot, name), 'utf8'), {
         status: 200,
         headers: { 'Content-Type': 'application/json' }
       });
     }));
+    const { apiGet } = await import('../../lib/api');
     const response = await apiGet<{ meta: { count: number } }>(
       '/api/sites?limit=100'
     );
     expect(response.meta.count).toBe(12);
     expect(fetch).toHaveBeenCalledTimes(2);
+  });
+
+  test('API 404 recovers through a version-consistent static bundle', async () => {
+    const fallbackRoot = join(root, 'public/demo-data/fallback');
+    const requests: string[] = [];
+    vi.stubGlobal('window', {
+      location: { search: '' },
+      localStorage: { getItem: () => null }
+    });
+    vi.stubGlobal('fetch', vi.fn(async (input: string | URL | Request) => {
+      const url = String(input);
+      requests.push(url);
+      if (url === '/api/sites?limit=100') {
+        return new Response(null, { status: 404 });
+      }
+      const pathname = url.split('?')[0];
+      const name = pathname.split('/').at(-1) ?? '';
+      return new Response(readFileSync(join(fallbackRoot, name), 'utf8'), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }));
+    const { apiGet } = await import('../../lib/api');
+    const response = await apiGet<{ meta: { count: number } }>(
+      '/api/sites?limit=100'
+    );
+    expect(response.meta.count).toBe(12);
+    expect(requests).toEqual([
+      '/api/sites?limit=100',
+      '/demo-data/fallback/index.json',
+      expect.stringMatching(
+        /^\/demo-data\/fallback\/core\.json\?version=extension-phase20-v1$/
+      )
+    ]);
+  });
+
+  test('a stale fallback bundle refreshes the index and retries once', async () => {
+    const fallbackRoot = join(root, 'public/demo-data/fallback');
+    let bundleRequests = 0;
+    vi.stubGlobal('fetch', vi.fn(async (input: string | URL | Request) => {
+      const url = String(input);
+      if (url.endsWith('/index.json')) {
+        return new Response(
+          readFileSync(join(fallbackRoot, 'index.json'), 'utf8'),
+          { status: 200, headers: { 'Content-Type': 'application/json' } }
+        );
+      }
+      bundleRequests += 1;
+      if (bundleRequests === 1) return new Response(null, { status: 404 });
+      return new Response(
+        readFileSync(join(fallbackRoot, 'core.json'), 'utf8'),
+        { status: 200, headers: { 'Content-Type': 'application/json' } }
+      );
+    }));
+    const { loadStaticFallback } = await import('../../lib/static-fallback');
+    const response = await loadStaticFallback<{ meta: { count: number } }>(
+      '/api/sites?limit=100'
+    );
+    expect(response.meta.count).toBe(12);
+    expect(fetch).toHaveBeenCalledTimes(4);
   });
 
   test('first render uses loading state instead of false KPI values', () => {

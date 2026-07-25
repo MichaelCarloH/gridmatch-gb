@@ -39,42 +39,71 @@ export function canonicalApiPath(path: string): string {
 }
 
 async function fallbackIndex(): Promise<FallbackIndex> {
-  indexPromise ??= fetch(`${ROOT}/index.json`, { cache: 'force-cache' }).then(
-    async (response) => {
+  indexPromise ??= fetch(`${ROOT}/index.json`, { cache: 'no-store' })
+    .then(async (response) => {
       if (!response.ok) throw new Error('Static artifact index is unavailable.');
       return (await response.json()) as FallbackIndex;
-    }
-  );
+    })
+    .catch((error) => {
+      indexPromise = null;
+      throw error;
+    });
   return indexPromise;
 }
 
-async function fallbackBundle(bundle: string): Promise<FallbackBundle> {
-  const existing = bundlePromises.get(bundle);
+async function fallbackBundle(
+  bundle: string,
+  version: string
+): Promise<FallbackBundle> {
+  const cacheKey = `${version}:${bundle}`;
+  const existing = bundlePromises.get(cacheKey);
   if (existing) return existing;
-  const request = fetch(`${ROOT}/${bundle}`, { cache: 'force-cache' }).then(
-    async (response) => {
+  const request = fetch(
+    `${ROOT}/${bundle}?version=${encodeURIComponent(version)}`,
+    { cache: 'no-store' }
+  )
+    .then(async (response) => {
       if (!response.ok) {
         throw new Error(`Static artifact bundle ${bundle} is unavailable.`);
       }
       return (await response.json()) as FallbackBundle;
-    }
-  );
-  bundlePromises.set(bundle, request);
+    })
+    .catch((error) => {
+      bundlePromises.delete(cacheKey);
+      throw error;
+    });
+  bundlePromises.set(cacheKey, request);
   return request;
+}
+
+async function loadFromIndex<T>(
+  canonical: string,
+  index: FallbackIndex
+): Promise<T> {
+  const route = index.routes[canonical];
+  if (!route) {
+    throw new Error(`No bundled fallback is available for ${canonical}.`);
+  }
+  const bundle = await fallbackBundle(route.bundle, index.version);
+  if (!(route.key in bundle.responses)) {
+    throw new Error(`Bundled fallback entry ${route.key} is unavailable.`);
+  }
+  return bundle.responses[route.key] as T;
 }
 
 export async function loadStaticFallback<T>(path: string): Promise<T> {
   const canonical = canonicalApiPath(path);
   const index = await fallbackIndex();
-  const route = index.routes[canonical];
-  if (!route) {
-    throw new Error(`No bundled fallback is available for ${canonical}.`);
+  try {
+    return await loadFromIndex<T>(canonical, index);
+  } catch {
+    // An open browser tab can outlive a deployment. Refresh both caches once so
+    // an old index is never combined with bundles from the new deployment.
+    indexPromise = null;
+    bundlePromises.clear();
+    const refreshedIndex = await fallbackIndex();
+    return loadFromIndex<T>(canonical, refreshedIndex);
   }
-  const bundle = await fallbackBundle(route.bundle);
-  if (!(route.key in bundle.responses)) {
-    throw new Error(`Bundled fallback entry ${route.key} is unavailable.`);
-  }
-  return bundle.responses[route.key] as T;
 }
 
 export function forceStaticFallback(): boolean {

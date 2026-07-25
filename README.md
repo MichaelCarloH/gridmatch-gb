@@ -4,6 +4,9 @@ Research-to-production prototype for forecasting, matching and hedging clean pow
 
 This repository has completed **Phase 11: product frontend**. It contains cached public-source clients, a deterministic demonstration portfolio, DST-safe validation, reproducible notebooks, site and portfolio forecast stacks, commercial renewable matching, leakage-aware hedge scenarios, an artifact-backed FastAPI service, and a responsive Next.js clean-energy product.
 
+Live product: [gridmatch-gb.vercel.app](https://gridmatch-gb.vercel.app) ·
+GitHub: [MichaelCarloH/gridmatch-gb](https://github.com/MichaelCarloH/gridmatch-gb)
+
 ## Quick start
 
 ```powershell

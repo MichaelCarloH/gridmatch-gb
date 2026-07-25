@@ -3,6 +3,7 @@
 ## Current phase
 
 Phase 11 — Responsive artifact-backed product frontend: complete.
+Requested GitHub publication and Vercel production deployment: complete.
 
 ## Preserved work and scope
 
@@ -15,7 +16,9 @@ Phase 11 — Responsive artifact-backed product frontend: complete.
 - `legacy-prototype/` remains archived and unchanged.
 - The completed Phase 10 API contract remains unchanged and is the runtime
   data boundary for the product.
-- Phase 12 QA and Phase 13 deployment were not started.
+- The full Phase 12 QA specification was not started. The user-requested
+  GitHub publication and Vercel deployment slice was completed and externally
+  smoke-tested without beginning later product work.
 
 ## Phase 11 product surface
 
@@ -76,7 +79,8 @@ warnings.
 - Visible units, origins, warnings and methodological boundaries: passed.
 - Loading, error, empty and retry states: passed.
 - Production TypeScript, lint and Next.js build: passed.
-- Phase 12 and deployment not started.
+- Phase 12 not started; the separately requested publication/deployment slice
+  is complete.
 
 ## API architecture
 
@@ -292,6 +296,30 @@ Generated benchmark evidence:
   `/research` and `/reports` all returned HTTP 200.
 - Live development proxy smoke test: health, 12 sites, 626 portfolio forecast
   rows, matching summary and 58 public-price records loaded through port 3000.
+
+## GitHub and Vercel publication
+
+- Public repository:
+  `https://github.com/MichaelCarloH/gridmatch-gb`
+- Draft publication pull request:
+  `https://github.com/MichaelCarloH/gridmatch-gb/pull/1`
+- Production product:
+  `https://gridmatch-gb.vercel.app`
+- Vercel is connected to the GitHub repository.
+- Deployment packages Next.js and FastAPI under one origin; production
+  `/api/*` requests route to `api/index.py`.
+- Research/notebook dependencies remain available through
+  `uv sync --extra dev` but are excluded from the production Python
+  dependency set.
+- Runtime artifacts are committed and included in the function bundle;
+  production requests do not fetch source data or train models.
+- Final Python function bundle: 422.98 MB, below Vercel's 500 MB limit.
+- External HTTP checks passed for `/`, `/dashboard`, `/map` and `/sites`.
+- External artifact-backed API checks returned HTTP 200 with data for
+  `/api/sites?limit=1`, `/api/portfolio/forecast?limit=1`,
+  `/api/matching/summary` and `/api/market/prices?limit=1`.
+- Publication verification: 83 Python tests passed, 4 frontend tests passed,
+  and the Next.js 15.5.21 production build passed.
 
 ## Known prototype limitations
 

@@ -16,6 +16,13 @@ src/gridmatch/data/schema.py
 src/gridmatch/data/settlements.py
 src/gridmatch/data/synthetic.py
 src/gridmatch/data/uploads.py
+src/gridmatch/features/__init__.py
+src/gridmatch/features/site.py
+src/gridmatch/models/__init__.py
+src/gridmatch/models/baselines.py
+src/gridmatch/models/metrics.py
+src/gridmatch/models/site_forecasting.py
+src/gridmatch/models/training.py
 src/gridmatch/research/__init__.py
 src/gridmatch/research/assets.py
 src/gridmatch/research/common.py

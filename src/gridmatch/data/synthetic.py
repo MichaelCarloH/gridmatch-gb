@@ -52,7 +52,32 @@ def _weather(index: pd.DatetimeIndex, latitude: float, longitude: float, rng: np
     clear_irradiance = 850 * sun_shape * (0.72 + 0.28 * np.sin(2 * np.pi * (day - 80) / 365))
     irradiance = np.clip(clear_irradiance * (1 - 0.0065 * cloud), 0, None)
     wind = np.clip(7.4 + 2.7 * np.sin(2 * np.pi * day / 6 + longitude) + 1.5 * np.sin(2 * np.pi * hour / 24) + rng.normal(0, 1.1, len(index)), 0, 32)
-    return {"temperature_c": temperature, "cloud_cover_pct": cloud, "irradiance_wm2": irradiance, "wind_speed_mps": wind, "daylight": daylight}
+    wind_direction = np.mod(
+        225
+        + 38 * np.sin(2 * np.pi * day / 9 + longitude)
+        + 24 * np.sin(2 * np.pi * hour / 24),
+        360,
+    )
+    wind_gust = np.clip(
+        wind + 2.4 + 0.8 * np.abs(np.sin(2 * np.pi * hour / 12)),
+        wind,
+        45,
+    )
+    surface_pressure = (
+        1013
+        + 11 * np.sin(2 * np.pi * day / 8 + longitude)
+        + 1.8 * np.cos(2 * np.pi * hour / 24)
+    )
+    return {
+        "temperature_c": temperature,
+        "cloud_cover_pct": cloud,
+        "irradiance_wm2": irradiance,
+        "wind_speed_mps": wind,
+        "wind_direction_deg": wind_direction,
+        "wind_gust_mps": wind_gust,
+        "surface_pressure_hpa": surface_pressure,
+        "daylight": daylight,
+    }
 
 
 def _demand(archetype: str, capacity: float, index: pd.DatetimeIndex, weather: dict[str, np.ndarray], portfolio_factor: np.ndarray, rng: np.random.Generator) -> tuple[np.ndarray, np.ndarray]:
@@ -147,6 +172,9 @@ def generate_portfolio(seed: int = SEED, days: int = DAYS) -> tuple[pd.DataFrame
             "temperature_c": np.round(weather["temperature_c"], 3),
             "irradiance_wm2": np.round(weather["irradiance_wm2"], 3),
             "wind_speed_mps": np.round(weather["wind_speed_mps"], 3),
+            "wind_direction_deg": np.round(weather["wind_direction_deg"], 3),
+            "wind_gust_mps": np.round(weather["wind_gust_mps"], 3),
+            "surface_pressure_hpa": np.round(weather["surface_pressure_hpa"], 3),
             "cloud_cover_pct": np.round(weather["cloud_cover_pct"], 3),
             "is_daylight": weather["daylight"],
             "anomaly_flag": anomaly,
@@ -167,7 +195,7 @@ def write_demo_dataset(output_root: Path | str = "data/demo", seed: int = SEED, 
     metadata_path = root / "site_metadata.json"
     sites.to_parquet(sites_path, index=False)
     observations.to_parquet(observations_path, index=False)
-    metadata = {"schema_version": "1", "seed": seed, "start_utc": START_UTC, "days": days, "site_count": len(sites), "observation_count": len(observations), "data_origin": "simulated", "units": {"observed_power_mw": "MW", "energy_mwh": "MWh", "temperature_c": "degrees Celsius", "irradiance_wm2": "W/m2", "wind_speed_mps": "m/s"}, "sites": sites.to_dict(orient="records")}
+    metadata = {"schema_version": "2", "seed": seed, "start_utc": START_UTC, "days": days, "site_count": len(sites), "observation_count": len(observations), "data_origin": "simulated", "units": {"observed_power_mw": "MW", "energy_mwh": "MWh", "temperature_c": "degrees Celsius", "irradiance_wm2": "W/m2", "wind_speed_mps": "m/s", "wind_direction_deg": "degrees", "wind_gust_mps": "m/s", "surface_pressure_hpa": "hPa"}, "sites": sites.to_dict(orient="records")}
     metadata_path.write_text(json.dumps(metadata, indent=2), encoding="utf-8")
     retrieved_at = pd.Timestamp(START_UTC).isoformat()
     for dataset_name, processed_path in (("simulated_sites", sites_path), ("simulated_observations", observations_path)):

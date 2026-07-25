@@ -2,87 +2,104 @@
 
 ## Current phase
 
-Phase 5 — Research notebook framework and notebooks 00–03: complete.
+Phase 6 — Individual site-level forecasting models: complete.
 
 ## Preserved work and scope
 
-- All completed Phase 3 public/simulated pipelines and Phase 4 schemas, settlement utilities, validation logic, tests and generated data artifacts remain intact.
+- Phase 3 public and simulated pipelines, Phase 4 settlement/quality validation, and Phase 5 notebooks remain operational.
+- The additional simulated wind-direction, gust and pressure fields do not advance the original seeded random generator; the prior 103,680 observations, 5,086 flags, 12 ready sites and 95.55–99.84 score range are preserved.
 - `legacy-prototype/` remains archived and unchanged.
-- No feature engineering, model training, portfolio forecasting, renewable matching, hedge modelling, API routes or frontend product pages were started.
+- No portfolio forecasting, reconciliation, renewable matching, hedge modelling, API routes or frontend product pages were started.
 
-## Completed Phase 5 implementation
+## Completed Phase 6 implementation
 
-- `src/gridmatch/research/common.py`: shared deterministic chart style and CSV artifact writer.
-- `src/gridmatch/research/market.py`: worked 46/48/50 settlement-day, imbalance and point-versus-probabilistic examples.
-- `src/gridmatch/research/assets.py`: reusable REPD technology, capacity, project-size, region, coordinate-quality and map summaries.
-- `src/gridmatch/research/profiles.py`: reusable archetype, weekday/weekend half-hour profile, capacity-factor, missingness, quality-flag and score-distribution summaries.
-- `src/gridmatch/research/weather.py`: weather-variable availability, coordinate-distance and demand/solar/wind methodology tables.
-- `scripts/build_research_notebooks.py`: deterministic source-notebook builder.
-- `scripts/execute_notebooks.py`: ordered, fail-fast execution using a repository-local kernelspec pinned to the active interpreter; writes executed copies, timings, status and the JSON index.
-- `pyproject.toml`: adds Matplotlib, nbformat, nbclient and ipykernel execution dependencies.
-- `tests/python/test_notebooks.py`: six tests for notebook contracts, cached-data use, index schema, error-free execution, artifacts and public/simulated disclosure.
+- `src/gridmatch/features/site.py`: 41 leakage-aware calendar, bank-holiday, weather, lag, rolling, physical and site-metadata features.
+- `src/gridmatch/models/baselines.py`: previous-day, previous-week, rolling same-period, generation persistence, physical solar and stylised wind baselines.
+- `src/gridmatch/models/site_forecasting.py`: Ridge statistical model and HistGradientBoosting point/q10/q50/q90 models with quantile repair and physical post-processing.
+- `src/gridmatch/models/metrics.py`: MAE, RMSE, nMAE, bias, pinball loss, interval coverage and interval width.
+- `src/gridmatch/models/training.py`: two-fold expanding rolling-origin training, artifact persistence, model cards, global fallbacks and strict JSON summaries.
+- `scripts/train_site_models.py`: trains all 12 demo sites and three global fallback stacks outside the web request path.
+- `tests/python/test_site_models.py`: seven tests covering issue-time safety, rolling splits, required baselines, model loading, quantiles, physical constraints, artifacts, metrics and improvement.
+- `pyproject.toml` and `uv.lock`: reproducible scikit-learn, joblib and UK-bank-holiday dependencies managed with `uv`.
 
-## Notebook and research outputs
+## Feature and validation design
 
-Source notebooks:
+- Target: simulated half-hourly demand or generation energy in MWh.
+- Forecast issue convention: exactly 48 half-hour periods before each valid time.
+- Every stored forecast has issue time, valid time, horizon, settlement date/period, training cutoff, model version and feature version.
+- Each rolling fold stops training no later than the earliest forecast issue time in that fold.
+- Validation uses two expanding seven-day folds and never uses a random split.
+- Weather is treated as a forecast-weather methodology proxy; current simulated realised weather is explicitly disclosed as a limitation.
 
-- `notebooks/00_gb_market_and_settlement.ipynb`
-- `notebooks/01_site_map_and_public_assets.ipynb`
-- `notebooks/02_data_quality_and_site_profiles.ipynb`
-- `notebooks/03_weather_features.ipynb`
+## Generated Phase 6 artifacts
 
-Executed copies and index:
+Per-site artifacts under `artifacts/models/{site_id}/` for all 12 sites:
 
-- `artifacts/notebooks/00_gb_market_and_settlement.executed.ipynb`
-- `artifacts/notebooks/01_site_map_and_public_assets.executed.ipynb`
-- `artifacts/notebooks/02_data_quality_and_site_profiles.executed.ipynb`
-- `artifacts/notebooks/03_weather_features.executed.ipynb`
-- `artifacts/notebooks/notebook_index.json`
+- `baseline.json`
+- `statistical.joblib`
+- `point.joblib`
+- `q10.joblib`
+- `q50.joblib`
+- `q90.joblib`
+- `metadata.json`
+- `model_card.md`
 
-Research summaries:
+Global fallbacks:
 
-- `research/01_gb_market_primer.md`
-- `research/02_data_source_audit.md`
-- `research/03_data_quality_findings.md`
-- `research/04_weather_and_leakage.md`
+- `artifacts/models/global_demand/`
+- `artifacts/models/global_solar/`
+- `artifacts/models/global_wind/`
 
-Generated evidence:
+Forecast and metric artifacts:
 
-- Eight figures under `artifacts/figures/`: one settlement-day figure, two public-asset figures, four site-profile figures and one weather-driver figure.
-- Nineteen CSV tables under `artifacts/tables/`: settlement/imbalance, REPD, site profile/quality and weather-methodology outputs.
-- Public REPD evidence covers 3,100 operational projects, including 3,096 valid and four invalid coordinates.
-- Simulated portfolio evidence preserves all 103,680 observations and all 5,086 quality flags; 12 sites are currently `ready`, with scores from 95.55 to 99.84.
+- `artifacts/forecasts/site_forecasts.parquet` — 7,512 out-of-sample forecast rows across 12 sites and two folds.
+- `artifacts/metrics/site_metrics_by_fold.parquet` — fold-level evidence.
+- `artifacts/metrics/site_metrics.parquet` — 68 aggregate site/model comparison rows.
+- `artifacts/metrics/site_metrics.json` — strict JSON summary and per-site baseline comparison.
 
-## Phase 5 P0 acceptance audit
+## Observed Phase 6 evidence
 
-- All four required notebooks begin with business purpose and operator relevance: passed.
-- Notebooks import reusable `gridmatch` modules, use cached Phase 3/4 artifacts and contain no ingestion clients or external API calls: passed.
-- Public and simulated data are explicitly distinguished in notebooks and summaries: passed.
-- GB participants, physical-versus-commercial matching, 46/48/50 settlement days, issue/delivery time, imbalance and probabilistic forecasts are covered without claiming full supplier settlement: passed.
-- REPD technology, capacity, size, region, geography and coordinate validity are analysed; two professional figures are saved: passed.
-- Archetypes, half-hour/weekday/weekend shapes, capacity factors, missingness, quality flags, score distribution and readiness are analysed; four required site-profile figures are saved: passed.
-- The 5,086 flags remain auditable and are described as review candidates, not confirmed faults: passed.
-- Weather issue/valid time, leakage, coordinate alignment, missingness and demand/solar/wind availability tables are covered without production feature generation: passed.
-- The ERA5 historical-weather versus forecast-vintage limitation is explicit: passed.
-- Execution is deterministic, ordered and fail-fast; all four executed notebooks contain no error outputs: passed.
-- Index fields, expected artifacts, summary structure and cached-ingestion boundary are test-covered: passed.
-- No Phase 5 P0 gaps remain.
+- All 12 sites have forecasts, a statistical model, point and q10/q50/q90 models, baseline evidence, metadata and a model card.
+- All stored estimators load and expose `predict`.
+- All 7,512 forecast rows satisfy `training_cutoff_utc <= issue_time_utc < valid_time_utc`.
+- All quantiles satisfy `q10 <= q50 <= q90`.
+- Forecast energy is non-negative; solar is zero at night; generation never exceeds installed capacity for a half-hour.
+- HistGradientBoosting improves the canonical rolling same-period baseline on all eight demand sites.
+- The physical solar and wind baselines remain slightly stronger than ML on the four renewable sites; this is retained as an honest result rather than hidden.
+- Probabilistic interval coverage across site ML models ranges from approximately 76.7% to 94.1%.
+
+## Phase 6 P0 acceptance audit
+
+- Every selected site has day-ahead point/q10/q50/q90 forecasts: passed.
+- Previous-day, previous-week, rolling same-period, persistence, physical solar and wind baselines are implemented where applicable: passed.
+- Ridge statistical and HistGradientBoosting ML models are trained per site: passed.
+- Demand, solar and wind feature requirements, including lags, rolling values, weather and metadata, are represented: passed.
+- Global demand, solar and wind fallback stacks are saved: passed.
+- Rolling-origin evaluation, versioned timing fields and all required metrics are stored: passed.
+- Per-site model artifacts load: passed.
+- Quantile ordering and physical constraints hold: passed.
+- At least one model improves on its canonical baseline; eight sites improve: passed.
+- Model cards disclose simulated data, realised-weather proxy use and production limitations: passed.
+- No Phase 6 P0 gaps remain.
 
 ## Verification evidence
 
-- `py -3 scripts/build_research_notebooks.py`: passed; generated four source notebooks.
-- `py -3 scripts/execute_notebooks.py`: passed; four notebooks executed in order and per-notebook UTC timestamps and durations were written to the index.
-- `py -3 -m pytest`: 36 passed.
+- `py -3 -m uv lock`: passed; reproducible lockfile created.
+- `py -3 -m uv sync --extra dev`: passed; Phase 6 dependencies installed in `.venv`.
+- `.\.venv\Scripts\python.exe scripts\build_demo_dataset.py`: passed; preserved Phase 3/4 evidence and added deterministic weather fields.
+- `.\.venv\Scripts\python.exe scripts\train_site_models.py`: passed; 12 site stacks, three fallbacks and all forecast/metric artifacts generated.
+- `.\.venv\Scripts\python.exe scripts\execute_notebooks.py`: passed; all four Phase 5 notebooks still execute.
+- `.\.venv\Scripts\python.exe -m pytest`: 43 passed without warnings.
 - `cmd /c npm run build`: passed; Next.js compiled, type-checked and generated four static pages.
-- Visual audit: settlement, REPD capacity/geography, site-profile and weather figures render legibly and support the accompanying conclusions.
 
 ## Known prototype limitations
 
-- REPD metadata does not imply public half-hourly generation or commercial availability.
-- The 12-site business portfolio is simulated.
-- Current Open-Meteo/ERA5 evidence is historical realised weather at one grid point, not an operational forecast-vintage archive.
-- Notebook 00 is an explanatory market primer, not a complete BSC or licensed-supplier settlement implementation.
+- Site and meter data are simulated; metrics are not production-performance claims.
+- Weather inputs are simulated realised values, not archived forecast vintages.
+- The 180-day history and two validation folds are sufficient for prototype evidence, not seasonal production approval.
+- Renewable physics baselines outperform ML in current validation; model complexity should not replace them without stronger evidence.
+- Forecasts do not yet include portfolio reconciliation, matching or hedge decisions.
 
 ## Next
 
-Proceed to Phase 6 only when explicitly requested.
+Proceed to Phase 7 (`07_PORTFOLIO_MODELS.md`) only when explicitly requested.

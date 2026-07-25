@@ -1,0 +1,240 @@
+{
+  "model_version": "portfolio-forecast-v1",
+  "feature_version": "portfolio-features-v1",
+  "data_origin": "simulated",
+  "forecast_rows": 626,
+  "validation_folds": 2,
+  "site_count": 12,
+  "simulation": {
+    "method": "split-normal marginals with one-factor Gaussian dependence",
+    "simulations": 600,
+    "correlation": 0.35,
+    "seed": 20260725
+  },
+  "reconciliation_weights": [
+    {
+      "validation_fold": 1,
+      "target": "demand",
+      "direct_weight": 0.5,
+      "bottom_up_weight": 0.5,
+      "selection_source": "documented default; no earlier validation fold"
+    },
+    {
+      "validation_fold": 1,
+      "target": "generation",
+      "direct_weight": 0.5,
+      "bottom_up_weight": 0.5,
+      "selection_source": "documented default; no earlier validation fold"
+    },
+    {
+      "validation_fold": 1,
+      "target": "net",
+      "direct_weight": 0.5,
+      "bottom_up_weight": 0.5,
+      "selection_source": "documented default; no earlier validation fold"
+    },
+    {
+      "validation_fold": 2,
+      "target": "demand",
+      "direct_weight": 0.3,
+      "bottom_up_weight": 0.7,
+      "selection_source": "MAE grid search on prior rolling-origin folds only"
+    },
+    {
+      "validation_fold": 2,
+      "target": "generation",
+      "direct_weight": 0.01,
+      "bottom_up_weight": 0.99,
+      "selection_source": "MAE grid search on prior rolling-origin folds only"
+    },
+    {
+      "validation_fold": 2,
+      "target": "net",
+      "direct_weight": 0.03,
+      "bottom_up_weight": 0.97,
+      "selection_source": "MAE grid search on prior rolling-origin folds only"
+    }
+  ],
+  "best_method_by_target_mae": {
+    "demand": "reconciled",
+    "generation": "baseline",
+    "net": "bottom_up"
+  },
+  "bottom_up_totals_equal_site_aggregation": true,
+  "all_intervals_ordered": true,
+  "metrics": [
+    {
+      "target": "demand",
+      "method": "baseline",
+      "evaluation_rows": 626,
+      "mae": 0.11264680151757188,
+      "rmse": 0.13723202332036477,
+      "nmae": 0.04734940513524633,
+      "bias": 0.09106741493610222,
+      "peak_error": 0.05334197656249999,
+      "simulated_hedge_cost_gbp": 5288.76733125,
+      "pinball_loss": null,
+      "interval_coverage": null,
+      "interval_width": null
+    },
+    {
+      "target": "demand",
+      "method": "bottom_up",
+      "evaluation_rows": 626,
+      "mae": 0.08783046588803657,
+      "rmse": 0.11137287304394629,
+      "nmae": 0.03691822809457536,
+      "bias": 0.0267967293949051,
+      "peak_error": 0.06815834426173052,
+      "simulated_hedge_cost_gbp": 4123.640373443317,
+      "pinball_loss": 0.030922752248650844,
+      "interval_coverage": 0.7635782747603834,
+      "interval_width": 0.2899670344489165
+    },
+    {
+      "target": "demand",
+      "method": "direct",
+      "evaluation_rows": 626,
+      "mae": 0.09278122409473465,
+      "rmse": 0.1163249565616974,
+      "nmae": 0.03899920556484136,
+      "bias": 0.022834161212547516,
+      "peak_error": 0.08705714282569525,
+      "simulated_hedge_cost_gbp": 4356.078471247792,
+      "pinball_loss": 0.03645973152641766,
+      "interval_coverage": 0.7859424920127795,
+      "interval_width": 0.43102421176741135
+    },
+    {
+      "target": "demand",
+      "method": "reconciled",
+      "evaluation_rows": 626,
+      "mae": 0.08779146251797577,
+      "rmse": 0.11105590838584115,
+      "nmae": 0.036901833608928465,
+      "bias": 0.024808711504500577,
+      "peak_error": 0.07662587137041453,
+      "simulated_hedge_cost_gbp": 4121.809165218963,
+      "pinball_loss": 0.03224922051486036,
+      "interval_coverage": 0.7971246006389776,
+      "interval_width": 0.3487016822800134
+    },
+    {
+      "target": "generation",
+      "method": "baseline",
+      "evaluation_rows": 626,
+      "mae": 0.05848705523414387,
+      "rmse": 0.07421627578865236,
+      "nmae": 0.026347698859418806,
+      "bias": -0.003313333774356063,
+      "peak_error": 0.06966069473350661,
+      "simulated_hedge_cost_gbp": 2745.9672432430543,
+      "pinball_loss": null,
+      "interval_coverage": null,
+      "interval_width": null
+    },
+    {
+      "target": "generation",
+      "method": "bottom_up",
+      "evaluation_rows": 626,
+      "mae": 0.06828749795821279,
+      "rmse": 0.08635181638008661,
+      "nmae": 0.030762677738916326,
+      "bias": -0.017173150086740946,
+      "peak_error": 0.09688132625086845,
+      "simulated_hedge_cost_gbp": 3206.0980291380906,
+      "pinball_loss": 0.1409166387108204,
+      "interval_coverage": 0.8929712460063898,
+      "interval_width": 1.8726053316828495
+    },
+    {
+      "target": "generation",
+      "method": "direct",
+      "evaluation_rows": 626,
+      "mae": 0.18468993511569376,
+      "rmse": 0.27285327901235007,
+      "nmae": 0.08320054366411508,
+      "bias": -0.028723194004345923,
+      "peak_error": 0.4069093258503596,
+      "simulated_hedge_cost_gbp": 8671.192453681822,
+      "pinball_loss": 0.07468115986713898,
+      "interval_coverage": 0.8242811501597445,
+      "interval_width": 1.0068599769620106
+    },
+    {
+      "target": "generation",
+      "method": "reconciled",
+      "evaluation_rows": 626,
+      "mae": 0.08904676150138237,
+      "rmse": 0.12836174847673668,
+      "nmae": 0.040114470579042716,
+      "bias": -0.019472836547880172,
+      "peak_error": 0.1824853664440483,
+      "simulated_hedge_cost_gbp": 4180.745452489902,
+      "pinball_loss": 0.11261829378401257,
+      "interval_coverage": 0.9313099041533547,
+      "interval_width": 1.6409357777544948
+    },
+    {
+      "target": "net",
+      "method": "baseline",
+      "evaluation_rows": 626,
+      "mae": 0.12780665122551246,
+      "rmse": 0.15988266327101053,
+      "nmae": 0.10355431300398148,
+      "bias": 0.09438074871045829,
+      "peak_error": 0.10017614191460932,
+      "simulated_hedge_cost_gbp": 6000.52227503781,
+      "pinball_loss": null,
+      "interval_coverage": null,
+      "interval_width": null
+    },
+    {
+      "target": "net",
+      "method": "bottom_up",
+      "evaluation_rows": 626,
+      "mae": 0.11126528478214737,
+      "rmse": 0.14491828813322288,
+      "nmae": 0.0901518036528261,
+      "bias": 0.043969879481646046,
+      "peak_error": 0.11424104858437809,
+      "simulated_hedge_cost_gbp": 5223.905120521819,
+      "pinball_loss": 0.1506004728269452,
+      "interval_coverage": 0.7012779552715654,
+      "interval_width": 1.7107853379700229
+    },
+    {
+      "target": "net",
+      "method": "direct",
+      "evaluation_rows": 626,
+      "mae": 0.23489381734274956,
+      "rmse": 0.32948466871919,
+      "nmae": 0.19032082955441357,
+      "bias": 0.08716083815600224,
+      "peak_error": 0.426044497584404,
+      "simulated_hedge_cost_gbp": 11028.264724242092,
+      "pinball_loss": 0.08852069526152508,
+      "interval_coverage": 0.7987220447284346,
+      "interval_width": 0.9889515442890788
+    },
+    {
+      "target": "net",
+      "method": "reconciled",
+      "evaluation_rows": 626,
+      "mae": 0.1356356596766867,
+      "rmse": 0.18344393317455357,
+      "nmae": 0.1098977042429335,
+      "bias": 0.06776971564783799,
+      "peak_error": 0.18942132770243159,
+      "simulated_hedge_cost_gbp": 6368.094221820441,
+      "pinball_loss": 0.12498836160406089,
+      "interval_coverage": 0.768370607028754,
+      "interval_width": 1.5033291487268448
+    }
+  ],
+  "artifacts": {
+    "forecasts": "artifacts/forecasts/portfolio_forecasts.parquet",
+    "comparison_figure": "C:/Users/Michael/Code/Volter/artifacts/figures/portfolio_comparison.png",
+    "error_correlation_figure": "C:/Users/Michael/Code/Volter/artifacts/figures/portfolio_error_correlation_heatmap.png"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "site_id": "dem_hospitality_edinburgh",
+  "canonical_baseline": "rolling_same_period",
+  "definitions": {
+    "rolling_same_period": "Mean of the same UTC half-hour across the prior four weeks.",
+    "previous_week": "Actual energy 336 periods before valid time.",
+    "previous_day": "Actual energy at the forecast issue time, exactly 48 periods before valid time."
+  },
+  "metrics": [
+    {
+      "site_id": "dem_hospitality_edinburgh",
+      "model_name": "rolling_same_period",
+      "model_type": "baseline",
+      "fold_count": 2,
+      "evaluation_rows": 626,
+      "mae": 0.009244267046387521,
+      "rmse": 0.011471042145608953,
+      "nmae": 0.03187678291857766,
+      "bias": 0.00716172002770936,
+      "pinball_loss": null,
+      "interval_coverage": null,
+      "interval_width": null
+    },
+    {
+      "site_id": "dem_hospitality_edinburgh",
+      "model_name": "previous_week",
+      "model_type": "baseline",
+      "fold_count": 2,
+      "evaluation_rows": 626,
+      "mae": 0.009445094878899836,
+      "rmse": 0.011835574181759963,
+      "nmae": 0.032569292685861506,
+      "bias": 0.0022887126949917894,
+      "pinball_loss": null,
+      "interval_coverage": null,
+      "interval_width": null
+    },
+    {
+      "site_id": "dem_hospitality_edinburgh",
+      "model_name": "previous_day",
+      "model_type": "baseline",
+      "fold_count": 2,
+      "evaluation_rows": 626,
+      "mae": 0.009921126580459771,
+      "rmse": 0.012433580199873265,
+      "nmae": 0.03421078131193025,
+      "bias": 0.0005746216748768469,
+      "pinball_loss": null,
+      "interval_coverage": null,
+      "interval_width": null
+    }
+  ]
+}

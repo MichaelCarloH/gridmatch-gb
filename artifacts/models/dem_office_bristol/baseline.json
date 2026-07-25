@@ -1,0 +1,53 @@
+{
+  "site_id": "dem_office_bristol",
+  "canonical_baseline": "rolling_same_period",
+  "definitions": {
+    "rolling_same_period": "Mean of the same UTC half-hour across the prior four weeks.",
+    "previous_week": "Actual energy 336 periods before valid time.",
+    "previous_day": "Actual energy at the forecast issue time, exactly 48 periods before valid time."
+  },
+  "metrics": [
+    {
+      "site_id": "dem_office_bristol",
+      "model_name": "rolling_same_period",
+      "model_type": "baseline",
+      "fold_count": 2,
+      "evaluation_rows": 626,
+      "mae": 0.01000126736453202,
+      "rmse": 0.01226335876812629,
+      "nmae": 0.03226215278881297,
+      "bias": 0.007239623599137932,
+      "pinball_loss": null,
+      "interval_coverage": null,
+      "interval_width": null
+    },
+    {
+      "site_id": "dem_office_bristol",
+      "model_name": "previous_week",
+      "model_type": "baseline",
+      "fold_count": 2,
+      "evaluation_rows": 626,
+      "mae": 0.010410527083333333,
+      "rmse": 0.013225544154103855,
+      "nmae": 0.033582345430107526,
+      "bias": 0.002266502001231527,
+      "pinball_loss": null,
+      "interval_coverage": null,
+      "interval_width": null
+    },
+    {
+      "site_id": "dem_office_bristol",
+      "model_name": "previous_day",
+      "model_type": "baseline",
+      "fold_count": 2,
+      "evaluation_rows": 626,
+      "mae": 0.014784651149425287,
+      "rmse": 0.022693657993786382,
+      "nmae": 0.04769242306266222,
+      "bias": 0.0020636301518883416,
+      "pinball_loss": null,
+      "interval_coverage": null,
+      "interval_width": null
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "site_id": "dem_warehouse_glasgow",
+  "canonical_baseline": "rolling_same_period",
+  "definitions": {
+    "rolling_same_period": "Mean of the same UTC half-hour across the prior four weeks.",
+    "previous_week": "Actual energy 336 periods before valid time.",
+    "previous_day": "Actual energy at the forecast issue time, exactly 48 periods before valid time."
+  },
+  "metrics": [
+    {
+      "site_id": "dem_warehouse_glasgow",
+      "model_name": "rolling_same_period",
+      "model_type": "baseline",
+      "fold_count": 2,
+      "evaluation_rows": 626,
+      "mae": 0.014837291220238094,
+      "rmse": 0.01974989794292404,
+      "nmae": 0.031236402568922305,
+      "bias": 0.008563171064244663,
+      "pinball_loss": null,
+      "interval_coverage": null,
+      "interval_width": null
+    },
+    {
+      "site_id": "dem_warehouse_glasgow",
+      "model_name": "previous_week",
+      "model_type": "baseline",
+      "fold_count": 2,
+      "evaluation_rows": 626,
+      "mae": 0.016502298624794746,
+      "rmse": 0.023039127140013525,
+      "nmae": 0.03474168131535736,
+      "bias": 0.0021622726806239732,
+      "pinball_loss": null,
+      "interval_coverage": null,
+      "interval_width": null
+    },
+    {
+      "site_id": "dem_warehouse_glasgow",
+      "model_name": "previous_day",
+      "model_type": "baseline",
+      "fold_count": 2,
+      "evaluation_rows": 626,
+      "mae": 0.019739369109195402,
+      "rmse": 0.0264987240348016,
+      "nmae": 0.041556566545674536,
+      "bias": 0.0010689849958949098,
+      "pinball_loss": null,
+      "interval_coverage": null,
+      "interval_width": null
+    }
+  ]
+}

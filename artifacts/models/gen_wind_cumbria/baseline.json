@@ -1,0 +1,83 @@
+{
+  "site_id": "gen_wind_cumbria",
+  "canonical_baseline": "physical_wind",
+  "definitions": {
+    "physical_wind": "Stylised cubic wind power curve with cut-in, rated and cut-out speeds.",
+    "persistence": "Latest generation available at the day-ahead issue time.",
+    "previous_day": "Actual energy at the forecast issue time, exactly 48 periods before valid time.",
+    "previous_week": "Actual energy 336 periods before valid time.",
+    "rolling_same_period": "Mean of the same UTC half-hour across the prior four weeks."
+  },
+  "metrics": [
+    {
+      "site_id": "gen_wind_cumbria",
+      "model_name": "physical_wind",
+      "model_type": "baseline",
+      "fold_count": 2,
+      "evaluation_rows": 626,
+      "mae": 0.033729685268444706,
+      "rmse": 0.04411419636908734,
+      "nmae": 0.011243228422814902,
+      "bias": 0.002197278868395284,
+      "pinball_loss": null,
+      "interval_coverage": null,
+      "interval_width": null
+    },
+    {
+      "site_id": "gen_wind_cumbria",
+      "model_name": "persistence",
+      "model_type": "baseline",
+      "fold_count": 2,
+      "evaluation_rows": 626,
+      "mae": 0.6023957768678161,
+      "rmse": 0.8516586650820426,
+      "nmae": 0.20079859228927202,
+      "bias": 0.06978599946633829,
+      "pinball_loss": null,
+      "interval_coverage": null,
+      "interval_width": null
+    },
+    {
+      "site_id": "gen_wind_cumbria",
+      "model_name": "previous_day",
+      "model_type": "baseline",
+      "fold_count": 2,
+      "evaluation_rows": 626,
+      "mae": 0.6023957768678161,
+      "rmse": 0.8516586650820426,
+      "nmae": 0.20079859228927202,
+      "bias": 0.06978599946633829,
+      "pinball_loss": null,
+      "interval_coverage": null,
+      "interval_width": null
+    },
+    {
+      "site_id": "gen_wind_cumbria",
+      "model_name": "previous_week",
+      "model_type": "baseline",
+      "fold_count": 2,
+      "evaluation_rows": 626,
+      "mae": 0.6045334115045156,
+      "rmse": 0.8671833414594503,
+      "nmae": 0.20151113716817187,
+      "bias": 0.09818957570812807,
+      "pinball_loss": null,
+      "interval_coverage": null,
+      "interval_width": null
+    },
+    {
+      "site_id": "gen_wind_cumbria",
+      "model_name": "rolling_same_period",
+      "model_type": "baseline",
+      "fold_count": 2,
+      "evaluation_rows": 626,
+      "mae": 0.7138101245920566,
+      "rmse": 0.9078394273468892,
+      "nmae": 0.2379367081973522,
+      "bias": 0.03547743625051312,
+      "pinball_loss": null,
+      "interval_coverage": null,
+      "interval_width": null
+    }
+  ]
+}

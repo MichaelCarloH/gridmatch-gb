@@ -1,0 +1,53 @@
+{
+  "site_id": "dem_manufacturing_sheffield",
+  "canonical_baseline": "rolling_same_period",
+  "definitions": {
+    "rolling_same_period": "Mean of the same UTC half-hour across the prior four weeks.",
+    "previous_week": "Actual energy 336 periods before valid time.",
+    "previous_day": "Actual energy at the forecast issue time, exactly 48 periods before valid time."
+  },
+  "metrics": [
+    {
+      "site_id": "dem_manufacturing_sheffield",
+      "model_name": "rolling_same_period",
+      "model_type": "baseline",
+      "fold_count": 2,
+      "evaluation_rows": 626,
+      "mae": 0.04200629835796388,
+      "rmse": 0.056823964285732005,
+      "nmae": 0.035005248631636565,
+      "bias": 0.032060444340106735,
+      "pinball_loss": null,
+      "interval_coverage": null,
+      "interval_width": null
+    },
+    {
+      "site_id": "dem_manufacturing_sheffield",
+      "model_name": "previous_week",
+      "model_type": "baseline",
+      "fold_count": 2,
+      "evaluation_rows": 626,
+      "mae": 0.042134644499178975,
+      "rmse": 0.05912871437238132,
+      "nmae": 0.03511220374931581,
+      "bias": 0.010314904392446634,
+      "pinball_loss": null,
+      "interval_coverage": null,
+      "interval_width": null
+    },
+    {
+      "site_id": "dem_manufacturing_sheffield",
+      "model_name": "previous_day",
+      "model_type": "baseline",
+      "fold_count": 2,
+      "evaluation_rows": 626,
+      "mae": 0.05416624046592775,
+      "rmse": 0.07706666446904062,
+      "nmae": 0.045138533721606464,
+      "bias": 0.005062529566912973,
+      "pinball_loss": null,
+      "interval_coverage": null,
+      "interval_width": null
+    }
+  ]
+}

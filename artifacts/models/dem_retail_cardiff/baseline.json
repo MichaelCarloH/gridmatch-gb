@@ -1,0 +1,53 @@
+{
+  "site_id": "dem_retail_cardiff",
+  "canonical_baseline": "rolling_same_period",
+  "definitions": {
+    "rolling_same_period": "Mean of the same UTC half-hour across the prior four weeks.",
+    "previous_week": "Actual energy 336 periods before valid time.",
+    "previous_day": "Actual energy at the forecast issue time, exactly 48 periods before valid time."
+  },
+  "metrics": [
+    {
+      "site_id": "dem_retail_cardiff",
+      "model_name": "rolling_same_period",
+      "model_type": "baseline",
+      "fold_count": 2,
+      "evaluation_rows": 626,
+      "mae": 0.011567572518986043,
+      "rmse": 0.01401796386577105,
+      "nmae": 0.035053250057533465,
+      "bias": 0.008594088965004104,
+      "pinball_loss": null,
+      "interval_coverage": null,
+      "interval_width": null
+    },
+    {
+      "site_id": "dem_retail_cardiff",
+      "model_name": "previous_week",
+      "model_type": "baseline",
+      "fold_count": 2,
+      "evaluation_rows": 626,
+      "mae": 0.011614769263136288,
+      "rmse": 0.014605895631759496,
+      "nmae": 0.035196270494352394,
+      "bias": 0.0029760178879310343,
+      "pinball_loss": null,
+      "interval_coverage": null,
+      "interval_width": null
+    },
+    {
+      "site_id": "dem_retail_cardiff",
+      "model_name": "previous_day",
+      "model_type": "baseline",
+      "fold_count": 2,
+      "evaluation_rows": 626,
+      "mae": 0.014408016954022988,
+      "rmse": 0.019135741205793796,
+      "nmae": 0.0436606574364333,
+      "bias": 0.0014430003489326764,
+      "pinball_loss": null,
+      "interval_coverage": null,
+      "interval_width": null
+    }
+  ]
+}

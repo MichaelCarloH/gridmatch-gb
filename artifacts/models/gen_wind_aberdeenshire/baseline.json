@@ -1,0 +1,83 @@
+{
+  "site_id": "gen_wind_aberdeenshire",
+  "canonical_baseline": "physical_wind",
+  "definitions": {
+    "physical_wind": "Stylised cubic wind power curve with cut-in, rated and cut-out speeds.",
+    "persistence": "Latest generation available at the day-ahead issue time.",
+    "previous_day": "Actual energy at the forecast issue time, exactly 48 periods before valid time.",
+    "previous_week": "Actual energy 336 periods before valid time.",
+    "rolling_same_period": "Mean of the same UTC half-hour across the prior four weeks."
+  },
+  "metrics": [
+    {
+      "site_id": "gen_wind_aberdeenshire",
+      "model_name": "physical_wind",
+      "model_type": "baseline",
+      "fold_count": 2,
+      "evaluation_rows": 626,
+      "mae": 0.04169822911761732,
+      "rmse": 0.05581540587607063,
+      "nmae": 0.011119527764697951,
+      "bias": -0.0049194111591690124,
+      "pinball_loss": null,
+      "interval_coverage": null,
+      "interval_width": null
+    },
+    {
+      "site_id": "gen_wind_aberdeenshire",
+      "model_name": "persistence",
+      "model_type": "baseline",
+      "fold_count": 2,
+      "evaluation_rows": 626,
+      "mae": 0.7073676249178982,
+      "rmse": 1.014782208510573,
+      "nmae": 0.18863136664477287,
+      "bias": 0.03843503702791462,
+      "pinball_loss": null,
+      "interval_coverage": null,
+      "interval_width": null
+    },
+    {
+      "site_id": "gen_wind_aberdeenshire",
+      "model_name": "previous_day",
+      "model_type": "baseline",
+      "fold_count": 2,
+      "evaluation_rows": 626,
+      "mae": 0.7073676249178982,
+      "rmse": 1.014782208510573,
+      "nmae": 0.18863136664477287,
+      "bias": 0.03843503702791462,
+      "pinball_loss": null,
+      "interval_coverage": null,
+      "interval_width": null
+    },
+    {
+      "site_id": "gen_wind_aberdeenshire",
+      "model_name": "previous_week",
+      "model_type": "baseline",
+      "fold_count": 2,
+      "evaluation_rows": 626,
+      "mae": 0.713732362910509,
+      "rmse": 1.0272203427161015,
+      "nmae": 0.19032863010946904,
+      "bias": 0.007478697290640393,
+      "pinball_loss": null,
+      "interval_coverage": null,
+      "interval_width": null
+    },
+    {
+      "site_id": "gen_wind_aberdeenshire",
+      "model_name": "rolling_same_period",
+      "model_type": "baseline",
+      "fold_count": 2,
+      "evaluation_rows": 626,
+      "mae": 0.923697526780583,
+      "rmse": 1.1734268414476798,
+      "nmae": 0.24631934047482212,
+      "bias": 0.0655803192118227,
+      "pinball_loss": null,
+      "interval_coverage": null,
+      "interval_width": null
+    }
+  ]
+}

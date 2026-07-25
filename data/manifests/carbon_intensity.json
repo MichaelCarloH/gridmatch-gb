@@ -1,0 +1,11 @@
+{
+  "data_origin": "public",
+  "dataset_name": "carbon_intensity",
+  "license_or_terms": "National Grid ESO Carbon Intensity API terms",
+  "processed_path": "data\\processed\\carbon_intensity.parquet",
+  "raw_path": "data\\raw\\carbon_intensity\\national-d6e80114bc1bbe39.json",
+  "retrieval_mode": "cache",
+  "retrieved_at": "2026-07-25T12:10:47.246647+00:00",
+  "schema_version": "1",
+  "source_url": "https://api.carbonintensity.org.uk/intensity/date/2026-07-01"
+}

@@ -1,0 +1,11 @@
+{
+  "data_origin": "public",
+  "dataset_name": "bm_units",
+  "license_or_terms": "Elexon Insights Solution API terms",
+  "processed_path": "data\\processed\\bm_units.parquet",
+  "raw_path": "data\\raw\\elexon\\bm_units-4b8eab254aa35eff.json",
+  "retrieval_mode": "cache",
+  "retrieved_at": "2026-07-25T12:10:44.293684+00:00",
+  "schema_version": "1",
+  "source_url": "https://data.elexon.co.uk/bmrs/api/v1/reference/bmunits/all"
+}

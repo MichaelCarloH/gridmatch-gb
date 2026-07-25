@@ -1,0 +1,11 @@
+{
+  "data_origin": "public",
+  "dataset_name": "repd",
+  "license_or_terms": "Open Government Licence v3.0",
+  "processed_path": "data\\processed\\repd_operational_sites.parquet",
+  "raw_path": "data\\raw\\desnz\\repd-0664bfc7193dfd4c.csv",
+  "retrieval_mode": "cache",
+  "retrieved_at": "2026-07-25T12:10:01.852024+00:00",
+  "schema_version": "1",
+  "source_url": "https://assets.publishing.service.gov.uk/media/69fc56908cc72d2f863ea58d/REPD_publication_Q1_2026.csv"
+}

@@ -1,0 +1,32 @@
+Metadata-Version: 2.4
+Name: gridmatch-gb
+Version: 0.1.0
+Summary: Great Britain clean-power forecasting and matching prototype
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+Requires-Dist: numpy>=1.26
+Requires-Dist: pandas>=2.2
+Requires-Dist: pyarrow>=15
+Requires-Dist: pyproj>=3.6
+Requires-Dist: requests>=2.31
+Provides-Extra: dev
+Requires-Dist: pytest>=8.0; extra == "dev"
+
+# GridMatch GB
+
+Research-to-production prototype for forecasting, matching and hedging clean power across Great Britain.
+
+This repository is currently in **Phase 2: repository structure**. It contains only the runnable frontend/Python scaffold and development configuration; data ingestion, models, API logic and product features are intentionally deferred to later build-pack phases.
+
+## Quick start
+
+```bash
+python -m pip install -e ".[dev]"
+npm install
+python -c "import gridmatch"
+npm run build
+```
+
+See [PLAN.md](PLAN.md) for phase-prioritised work and [PROGRESS.md](PROGRESS.md) for the current implementation record.
+
+Independent prototype. It does not represent Volter, Elexon, NESO or DESNZ systems, contracts or data.

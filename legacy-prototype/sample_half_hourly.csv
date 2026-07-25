@@ -1,0 +1,11 @@
+timestamp_utc,settlement_period,site,kind,mwh
+2026-07-24T00:00:00+00:00,1,Mercia Foods,demand,0.378
+2026-07-24T00:00:00+00:00,1,Northline Logistics,demand,0.213
+2026-07-24T00:00:00+00:00,1,East Fen Solar,solar,0.000
+2026-07-24T00:00:00+00:00,1,Moorland Wind,wind,0.452
+2026-07-24T00:00:00+00:00,1,West Coast Wind,wind,0.324
+2026-07-24T00:30:00+00:00,2,Mercia Foods,demand,0.372
+2026-07-24T00:30:00+00:00,2,Northline Logistics,demand,0.208
+2026-07-24T00:30:00+00:00,2,East Fen Solar,solar,0.000
+2026-07-24T00:30:00+00:00,2,Moorland Wind,wind,0.469
+2026-07-24T00:30:00+00:00,2,West Coast Wind,wind,0.336

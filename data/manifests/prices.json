@@ -1,0 +1,11 @@
+{
+  "data_origin": "public",
+  "dataset_name": "prices",
+  "license_or_terms": "Elexon Insights Solution API terms",
+  "processed_path": "data\\processed\\prices.parquet",
+  "raw_path": "data\\raw\\elexon\\market_index-685e89b7f8693dd5.json; data\\raw\\elexon\\system_prices-c18c9d2c1823661e.json",
+  "retrieval_mode": "cache",
+  "retrieved_at": "2026-07-25T12:10:44.606974+00:00",
+  "schema_version": "1",
+  "source_url": "https://data.elexon.co.uk/bmrs/api/v1/balancing/pricing/market-index; https://data.elexon.co.uk/bmrs/api/v1/balancing/settlement/system-prices/2026-07-15"
+}

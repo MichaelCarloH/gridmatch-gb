@@ -1,0 +1,11 @@
+{
+  "data_origin": "public",
+  "dataset_name": "neso_demand_demo",
+  "license_or_terms": "NESO data portal terms",
+  "processed_path": "data\\processed\\neso_demand_demo.parquet",
+  "raw_path": "data\\raw\\neso\\datastore_search-166645e2e42c7079.json",
+  "retrieval_mode": "cache",
+  "retrieved_at": "2026-07-25T12:10:45.633980+00:00",
+  "schema_version": "1",
+  "source_url": "https://api.neso.energy/api/3/action/datastore_search"
+}

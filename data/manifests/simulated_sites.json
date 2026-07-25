@@ -1,0 +1,11 @@
+{
+  "data_origin": "simulated",
+  "dataset_name": "simulated_sites",
+  "license_or_terms": "Synthetic demonstration data; no real customers",
+  "processed_path": "data\\demo\\sites.parquet",
+  "raw_path": "",
+  "retrieval_mode": "generated",
+  "retrieved_at": "2025-01-01T00:00:00+00:00",
+  "schema_version": "1",
+  "source_url": "generated:gridmatch.data.synthetic"
+}

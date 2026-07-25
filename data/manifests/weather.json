@@ -1,0 +1,11 @@
+{
+  "data_origin": "public",
+  "dataset_name": "weather",
+  "license_or_terms": "Open-Meteo CC BY 4.0",
+  "processed_path": "data\\processed\\weather.parquet",
+  "raw_path": "data\\raw\\open_meteo\\weather-27d68b23e311a5df.json",
+  "retrieval_mode": "cache",
+  "retrieved_at": "2026-07-25T12:10:46.452849+00:00",
+  "schema_version": "1",
+  "source_url": "https://archive-api.open-meteo.com/v1/archive"
+}

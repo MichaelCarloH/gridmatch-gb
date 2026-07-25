@@ -1,0 +1,11 @@
+{
+  "data_origin": "public",
+  "dataset_name": "public_generation",
+  "license_or_terms": "Elexon Insights Solution API terms",
+  "processed_path": "data\\processed\\public_generation.parquet",
+  "raw_path": "data\\raw\\elexon\\b1610-56d7e405e18d67b9.json",
+  "retrieval_mode": "cache",
+  "retrieved_at": "2026-07-25T12:10:44.429212+00:00",
+  "schema_version": "1",
+  "source_url": "https://data.elexon.co.uk/bmrs/api/v1/datasets/B1610"
+}

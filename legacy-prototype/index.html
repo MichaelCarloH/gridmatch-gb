@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0e121a">
+  <title>GridMatch GB — Clean power intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main>
+    <nav class="topbar wrap" aria-label="Main navigation">
+      <a class="brand" href="#overview" aria-label="GridMatch GB home"><i></i>GridMatch<span>GB</span></a>
+      <div class="navlinks"><a class="active" href="#overview">Overview</a><a href="#forecast">Forecast</a><a href="#matching">Matching</a><a href="#assets">Assets</a><a href="#reports">Reports</a></div>
+      <button class="avatar" aria-label="Open account menu">MC</button>
+    </nav>
+
+    <section class="hero wrap" id="overview">
+      <div class="eyebrow"><span class="live-dot"></span> Portfolio operating normally <b>•</b> Friday, 24 July 2026</div>
+      <div class="hero-grid">
+        <div>
+          <p class="kicker">Clean power, clearly matched</p>
+          <h1>Know every half-hour.<br><em>Move with confidence.</em></h1>
+          <p class="intro">Forecast business demand, match it to renewable generation and turn the residual into a clearer day-ahead decision.</p>
+          <div class="hero-actions"><a class="button primary" href="#forecast">View day-ahead plan <span>→</span></a><button class="button quiet" id="downloadBrief">Download briefing</button></div>
+        </div>
+        <div class="orbital-card" aria-label="Portfolio clean-power match rate">
+          <div class="orbital-top"><span>Tomorrow's match</span><button class="dots" aria-label="More options">•••</button></div>
+          <div class="orbital-middle"><div class="ring"><b id="ringValue">61.7<small>%</small></b></div><div><strong>23.7 MWh</strong><span>directly matched</span><p><i class="up">↑ 6.4%</i> vs. last Friday</p></div></div>
+          <div class="orbital-bottom"><span>Demand<br><b>38.4 MWh</b></span><span>Renewable supply<br><b>26.1 MWh</b></span></div>
+          <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="kpis wrap" aria-label="Portfolio indicators">
+      <article><span class="metric-icon blue">↘</span><p>Forecast demand</p><h2>38.4 <small>MWh</small></h2><em class="positive">↓ 3.1% <b>vs. last week</b></em></article>
+      <article><span class="metric-icon green">⌁</span><p>Renewable generation</p><h2>26.1 <small>MWh</small></h2><em class="positive">↑ 6.4% <b>vs. last week</b></em></article>
+      <article><span class="metric-icon amber">⊙</span><p>Residual grid import</p><h2>14.7 <small>MWh</small></h2><em class="neutral">P90 17.9 <b>MWh</b></em></article>
+      <article><span class="metric-icon navy">↓</span><p>Carbon avoided</p><h2>4.79 <small>tCO₂e</small></h2><em class="positive">↑ 0.31 <b>tCO₂e</b></em></article>
+    </section>
+
+    <section class="wrap dashboard" id="forecast">
+      <div class="section-heading"><div><p class="kicker">Day-ahead intelligence</p><h2>Forecast the shape of tomorrow.</h2></div><div class="controls"><label>Portfolio <select id="portfolioSelect"><option>All sites</option><option>Buy power</option><option>Sell power</option></select></label><label>Delivery day <button class="date-button">24 Jul 2026 <span>⌄</span></button></label></div></div>
+      <div class="forecast-grid">
+        <article class="panel chart-panel">
+          <div class="panel-head"><div><h3>Portfolio demand forecast</h3><p>Bottom-up reconciled forecast · 48 settlement periods</p></div><div class="legend"><span><i class="dot blue"></i>P50</span><span><i class="band"></i>P10–P90</span></div></div>
+          <div class="chart-wrap"><svg id="forecastChart" viewBox="0 0 720 248" role="img" aria-label="Half-hourly portfolio demand forecast with uncertainty band"></svg></div>
+          <div class="chart-foot"><span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>23:30</span></div>
+        </article>
+        <aside class="dark-panel">
+          <p class="mini-label">Hedge recommendation</p><h3>16.2 <small>MWh</small></h3><p class="muted-light">Buy day-ahead at P67. Short-cost exposure is 1.6× long-cost exposure.</p>
+          <div class="hedge-meter"><div><span>Forecast P10</span><b>13.8 MWh</b></div><div class="meter"><i></i><b></b></div><div><span>Forecast P90</span><b>17.9 MWh</b></div></div>
+          <div class="dark-divider"></div>
+          <div class="decision"><span class="decision-icon">✓</span><p><b>Expected imbalance cost</b><br><span>£184 less than a flat P50 hedge</span></p></div>
+          <button class="dark-button" id="explainHedge">See decision logic <span>→</span></button>
+        </aside>
+      </div>
+    </section>
+
+    <section class="match-section" id="matching">
+      <div class="wrap">
+        <div class="section-heading light"><div><p class="kicker">Half-hourly matching</p><h2>Put local clean power to work.</h2><p class="subcopy">Every interval exposes matched demand, remaining grid need and surplus renewable supply.</p></div><button class="button quiet light-outline" id="toggleView">Show residual view</button></div>
+        <div class="match-grid">
+          <article class="match-graphic"><div class="match-labels"><span class="supply"><i></i> Renewable supply</span><span class="demand"><i></i> Business demand</span></div><svg id="matchChart" viewBox="0 0 800 280" role="img" aria-label="Renewable supply and business demand by half-hour"></svg><div class="chart-foot dark-foot"><span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>23:30</span></div></article>
+          <article class="match-summary"><p class="mini-label">Matching outcome</p><div class="big-number">61.7<small>%</small></div><h3>renewable coverage</h3><div class="outcome-row"><span><i class="square green"></i>Matched</span><b>23.7 MWh</b></div><div class="outcome-row"><span><i class="square blue"></i>Grid residual</span><b>14.7 MWh</b></div><div class="outcome-row"><span><i class="square amber"></i>Spill / export</span><b>2.4 MWh</b></div><a href="#reports">Explore matching report <span>→</span></a></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap assets" id="assets">
+      <div class="section-heading"><div><p class="kicker">Asset intelligence</p><h2>See what your assets are telling you.</h2></div><a href="#assets" class="text-link">Asset workspace <span>→</span></a></div>
+      <div class="asset-layout">
+        <div class="asset-table" role="table" aria-label="Renewable asset monitoring"><div class="table-row table-head" role="row"><span>Asset</span><span>Type</span><span>Forecast</span><span>Performance</span><span>Status</span></div><div class="table-row" role="row"><span><b>East Fen Solar</b><small>Lincolnshire · 3.6 MWp</small></span><span>Solar</span><span>6.8 MWh</span><span><b>97.8%</b><small>vs expected</small></span><span class="status good">● Healthy</span></div><div class="table-row" role="row"><span><b>Moorland Wind</b><small>Yorkshire · 4.4 MW</small></span><span>Wind</span><span>11.7 MWh</span><span><b>101.2%</b><small>vs expected</small></span><span class="status good">● Healthy</span></div><div class="table-row" role="row"><span><b>West Coast Wind</b><small>Cumbria · 3.2 MW</small></span><span>Wind</span><span>7.6 MWh</span><span><b>88.6%</b><small>vs expected</small></span><span class="status warn">● Review</span></div></div>
+        <aside class="alert-card"><span class="alert-icon">!</span><p class="mini-label">One item needs attention</p><h3>West Coast Wind<br>underperforming</h3><p>Output is 11.4% below weather-normalised expectation since 09:30.</p><div><span>Estimated lost revenue</span><b>£142</b></div><button id="openAlert">Review anomaly <span>→</span></button></aside>
+      </div>
+    </section>
+
+    <section class="report-section" id="reports"><div class="wrap report-grid"><div><p class="kicker">Made for practical decisions</p><h2>From half-hour data<br>to board-ready clarity.</h2><p>Give finance, operations and sustainability teams the same transparent view of energy, cost and impact.</p><a class="button primary" href="#overview">Open reporting centre <span>→</span></a></div><div class="report-card"><div class="report-card-head"><span>MONTHLY BRIEFING</span><span>JUL 2026</span></div><h3>Portfolio impact<br><em>at a glance.</em></h3><div class="report-stat"><b>£8,420</b><span>estimated procurement value</span></div><div class="report-stat"><b>38.6 tCO₂e</b><span>carbon avoided this month</span></div><div class="report-lines"><i></i><i></i><i></i><i></i><i></i><i></i></div></div></div></section>
+
+    <footer class="wrap"><a class="brand" href="#overview"><i></i>GridMatch<span>GB</span></a><p>Independent prototype using public and simulated data. Not affiliated with or endorsed by Volter, Elexon, NESO or DESNZ.</p><span>© 2026 GridMatch GB</span></footer>
+  </main>
+  <dialog id="insightDialog"><button class="close-dialog" aria-label="Close">×</button><p class="kicker">Decision note</p><h2 id="dialogTitle">A transparent hedge recommendation</h2><p id="dialogText">The selected quantity sits above the median forecast because a short imbalance costs more than a long imbalance. It is a recommendation for review, not an automated trade.</p></dialog>
+  <script src="app.js"></script>
+</body>
+</html>

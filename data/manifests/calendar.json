@@ -1,0 +1,11 @@
+{
+  "data_origin": "public",
+  "dataset_name": "calendar",
+  "license_or_terms": "Open Government Licence v3.0",
+  "processed_path": "data\\processed\\calendar.parquet",
+  "raw_path": "data\\raw\\calendar\\bank_holidays-c05a7ae9a9162cfa.json",
+  "retrieval_mode": "cache",
+  "retrieved_at": "2026-07-25T12:10:47.763485+00:00",
+  "schema_version": "1",
+  "source_url": "https://www.gov.uk/bank-holidays.json"
+}

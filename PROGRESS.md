@@ -2,7 +2,14 @@
 
 ## Current phase
 
-Phase 11 — Responsive artifact-backed product frontend: complete.
+Extension Phases 11–20: complete locally.
+
+The Phase 11-only statements below are retained as historical evidence from
+the earlier checkpoint; the final extension status and verification appear at
+the end of this file.
+
+Extension Phase 11 — Shared multi-workspace product shell: complete.
+Original Phase 11 — Responsive artifact-backed product frontend: complete.
 Requested GitHub publication and Vercel production deployment: complete.
 
 ## Preserved work and scope
@@ -16,9 +23,69 @@ Requested GitHub publication and Vercel production deployment: complete.
 - `legacy-prototype/` remains archived and unchanged.
 - The completed Phase 10 API contract remains unchanged and is the runtime
   data boundary for the product.
-- The full Phase 12 QA specification was not started. The user-requested
-  GitHub publication and Vercel deployment slice was completed and externally
-  smoke-tested without beginning later product work.
+- Extension Phases 12–20 build on the preserved Phase 3–10 evidence without
+  changing saved model outputs.
+- The earlier GitHub publication and Vercel deployment remain available; the
+  new local extension changes have not been externally published without
+  explicit authorization.
+
+## Extension Phase 11 shared product shell
+
+Implemented workspace roots:
+
+- `/business`
+- `/generator`
+- `/operations`
+- `/models`
+- `/research`
+- `/admin`
+
+Shared platform infrastructure:
+
+- `WorkspaceProvider` and `WorkspaceSwitcher` persist the selected workspace
+  in `gridmatch.workspace` and route to the selected workspace root.
+- `PrimaryNav`, `SecondaryNav` and `Breadcrumbs` adapt the existing completed
+  evidence routes to the active workspace.
+- The shell persistently shows the exact forecast window, public/simulated/
+  uploaded disclosure and API/artifact availability.
+- `MetricExplanation`, `HowCalculatedDrawer`, `ActionCard`,
+  `DataOriginBadge`, `ScenarioBadge`, `ArtifactStatus`,
+  `LoadingSkeleton`, `ErrorState` and `EmptyState` are shared components.
+- Root loading, error and not-found boundaries are implemented.
+- First-render KPI placeholders use loading skeletons or explicit unavailable
+  states; no count, zero or em dash is presented as hydrated evidence.
+- Existing dashboard, forecast, map, matching, market, research, report and
+  site calculations are unchanged.
+
+Static fallback:
+
+- `scripts/build_frontend_fallback.py` deterministically exports existing API
+  responses from the committed artifacts.
+- `public/demo-data/fallback/` contains seven route-grouped JSON bundles,
+  an index and 115 read-only API views.
+- Total fallback size is 2.25 MB.
+- GET requests fall back automatically after API/network failure.
+- `NEXT_PUBLIC_GRIDMATCH_FORCE_STATIC=true`, `?data=static` or the
+  `gridmatch.data-delivery=static` local-storage setting forces the read-only
+  fallback.
+- Interactive POST recomputation remains live-API-only and reports that
+  boundary explicitly.
+
+Extension Phase 11 acceptance audit:
+
+- Workspace switcher: passed.
+- Primary and secondary navigation: passed.
+- Route breadcrumbs: passed.
+- Exact demo-period badge: passed.
+- Persistent data-origin disclosure: passed.
+- Global loading, error, empty and not-found states: passed.
+- API and artifact availability indicator: passed.
+- Static fallback without FastAPI: passed.
+- Direct navigation for all workspace roots and `/research`: passed.
+- No P0 workspace route returns 404: passed.
+- No false first-render KPI: passed.
+- Existing Phase 3–10 artifacts and calculations unchanged: passed.
+- No Extension Phase 12 detail page started: passed.
 
 ## Phase 11 product surface
 
@@ -321,6 +388,29 @@ Generated benchmark evidence:
 - Publication verification: 83 Python tests passed, 4 frontend tests passed,
   and the Next.js 15.5.21 production build passed.
 
+## Extension Phase 11 verification
+
+- `.\.venv\Scripts\python.exe scripts\build_frontend_fallback.py`: passed;
+  115 indexed static API views generated across seven bundles.
+- `.\.venv\Scripts\python.exe -m pytest -q`: 86 passed in 23.40 seconds.
+- `cmd /c npm test`: 10 tests passed across the original product and extension
+  shell suites.
+- `cmd /c npm run build`: passed; Next.js generated 17 static pages and listed
+  every required workspace root.
+- `cmd /c npm start -- -p 3100`: production server started without FastAPI.
+- Direct HTTP navigation returned 200 for `/business`, `/generator`,
+  `/operations`, `/models`, `/research`, `/admin` and
+  `/dashboard?data=static`.
+- `/demo-data/fallback/index.json` and `core.json` returned HTTP 200 while
+  `/api/sites` correctly returned 404 with FastAPI absent; the forced-static
+  frontend test loaded the bundled 12-site response instead.
+- The exact port-3100 Node test process was stopped after verification.
+- `cmd /c npm run dev`: the combined local stack started successfully;
+  `/business`, `/generator`, `/operations`, `/models`, `/research`, `/admin`,
+  `/health` and `/api/sites?limit=1` all returned HTTP 200.
+- The exact port-3000 and port-8000 test listeners were stopped after the
+  local-API verification.
+
 ## Known prototype limitations
 
 - Portfolio, forecast, allocation and hedge-volume inputs are simulated.
@@ -334,6 +424,172 @@ Generated benchmark evidence:
 - Scenario costs are not realised savings, financial advice or executable
   trading instructions.
 
-## Next
+## Extension Phases 12–20
 
-Proceed to Phase 12 (`12_TESTING_AND_QA.md`) only when explicitly requested.
+Status: implemented and verified locally on 25 July 2026.
+
+### Phase 12 — business customer portal
+
+Generated:
+
+- `/business`, `/business/sites`, `/business/sites/[siteId]`,
+  `/business/renewables`, `/business/energy-plan` and `/business/reports`.
+- Artifact-backed consumption, renewable match, coverage, residual, scenario
+  cost, action and quality KPIs with units, source, calculation and limitation.
+- Site load, peak, baseload, probabilistic forecast, anomalies, quality and
+  archetype context.
+- Client-language energy plan and print-safe business report.
+
+### Phase 13 — renewable generator portal
+
+Generated:
+
+- `/generator`, `/generator/output`, `/generator/offtake`,
+  `/generator/revenue`, `/generator/assets`, `/generator/sites/[siteId]` and
+  `/generator/reports`.
+- Output, q10/q50/q90, capacity factor, weather, availability, commercial
+  allocation, unused output and asset incidents.
+- Reference-price revenue and underperformance scenarios with explicit
+  invoice, contract and physical-routing boundaries.
+
+### Phase 14 — operations control room
+
+Generated:
+
+- `/operations`, `/operations/portfolio`, `/operations/forecasts`,
+  `/operations/matching`, `/operations/risk` and `/operations/scenarios`.
+- Half-hour demand, generation, matching, residual, contracted-volume proxy,
+  adjustment, quantiles and realised-result table.
+- Planned/realised charts; short/long risk, scenario cost, p95, CVaR95, bias,
+  quality and error drivers.
+- Explicit demand, solar, wind, matching and price deviation attribution.
+- Bounded short/long price, demand, low-wind, solar-shortfall, generator-outage,
+  missing-data and model controls with no trade execution or retraining.
+
+### Phase 15 — diversification lab
+
+Generated:
+
+- `/operations/diversification`, `/operations/concentration`,
+  `/operations/stress-tests` and `/operations/portfolio-addition`.
+- Saved 12 × 12 site-error correlation view and site risk-contribution
+  estimates.
+- Largest, top-five and HHI concentration by customer, generator, region,
+  technology and archetype.
+- Eight stable deterministic stress scenarios and four hypothetical addition
+  profiles. No request-time training.
+
+The static fallback now includes `/api/portfolio/correlation`.
+
+### Phase 16 — model operations
+
+Generated:
+
+- `/models`, `/models/performance`, `/models/calibration`, `/models/registry`,
+  `/models/incidents` and `/models/data-drift`.
+- Site → global fallback → bottom-up → direct → reconciled hierarchy and
+  selection rationale.
+- MAE, RMSE, bias, pinball loss, q10/q50/q90 empirical reliability, aggregate
+  interval coverage/width and registry lineage.
+- Horizon, settlement-period, representative-site and deterministic
+  weather-regime performance drill-down.
+- Missing-artifact, quantile-crossing, physical-limit, challenger, bias and
+  quality checks.
+- Drift proxies are labelled as short-window artifact monitoring, not
+  fabricated production MLOps.
+
+### Phase 17 — admin and data operations
+
+Generated:
+
+- `/admin`, `/admin/customers`, `/admin/customers/new`, `/admin/generators`,
+  `/admin/generators/new`, `/admin/contracts`, `/admin/data`,
+  `/admin/data/uploads` and `/admin/data/incidents`.
+- Non-persistent customer and generator previews.
+- Visibly simulated contracts with no legal, billing, certificate or payment
+  claim.
+- Meter/weather/price/artifact readiness and manual-review queue.
+- Live mode uses the Phase 4 upload API. Static mode uses a bounded browser
+  schema mirror. Both preserve annotated preview rows and disable storage.
+
+### Phase 18 — demo, reports and explainability
+
+Generated:
+
+- `/demo` ten-step guided client flow.
+- Business, generator and portfolio print-safe reports.
+- Full metric lineage:
+  meter → validation → weather → site forecast → portfolio → allocation →
+  residual → recommendation → reconciliation → reporting.
+- Each lineage step exposes version, timestamp context, input/output and a
+  methodology link.
+
+### Phase 19 — integration and deployment audit
+
+- All 43 extension and supporting routes returned HTTP 200 through a production
+  Next.js server with FastAPI absent and `?data=static`.
+- Static fallback version `extension-phase20-v1` contains 116 canonical API
+  views across seven bundles.
+- Correlation fallback contains 12 site IDs and 12 matrix rows.
+- Local combined mode returned HTTP 200 for representative business,
+  diversification, model-incident and upload pages, plus `/health`,
+  `/api/sites?limit=1`, `/api/portfolio/correlation` and
+  `/api/market/policy-summary`.
+- Live upload validation returned 100 / 100, `ready`, three annotated preview
+  rows and `permanent_storage=false`.
+- The production build generated 50 pages with shared first-load JavaScript of
+  103 kB; route-specific first-load totals were 107–117 kB.
+- Responsive, reduced-motion, print, chart-label and table-caption rules are
+  present.
+- The existing GitHub/Vercel publication remains documented. These local
+  extension changes were not pushed or redeployed because this implementation
+  request did not explicitly authorize external publication.
+
+### Phase 20 — interview packaging
+
+Generated or refreshed:
+
+- `README.md`
+- `ARCHITECTURE.md`
+- `DATA_SOURCES.md`
+- `MODEL_CARDS.md`
+- `LIMITATIONS.md`
+- `DEMO_SCRIPT.md`
+- `INTERVIEW_TALKING_POINTS.md`
+- `PRODUCT_WALKTHROUGH.md`
+- `FINAL_AUDIT.md`
+
+The package includes a 90-second walkthrough, product narrative, claims
+guardrails, expected interview questions, verification evidence and the honest
+coding-agent statement.
+
+## Extension verification commands and results
+
+- `py -3 -m uv run python scripts/build_frontend_fallback.py`: passed; 116
+  static API views across seven bundles.
+- `cmd /c npx tsc --noEmit`: passed.
+- `cmd /c npm test`: the first sandboxed launch could not let esbuild read the
+  config root; the authorized rerun passed 16 / 16 tests in three files.
+- `cmd /c npm run build`: initial corrective runs identified the missing
+  `PortfolioMetric.interval_width` type and two over-narrow literal state
+  types. After fixes, the final build passed and generated 50 pages.
+- `cmd /c npm start -- -p 3100`: passed; 43 / 43 direct static-mode routes
+  returned HTTP 200.
+- `cmd /c npm run dev`: passed; Next.js and FastAPI started together and all
+  representative page/API checks returned HTTP 200.
+- `curl.exe -sS -F
+  "file=@tests/fixtures/upload_valid.csv;type=text/csv"
+  http://127.0.0.1:3000/api/upload/validate`: passed; score 100, ready, zero
+  anomalies, three preserved preview rows and no storage.
+- `py -3 -m uv run pytest -q`: failed because the console entry point did not
+  include the repository root on `sys.path`.
+- `py -3 -m uv run python -m pytest -q`: passed; 86 tests in 17.71 seconds.
+- `py -3 -m uv run python scripts/execute_notebooks.py`: passed; all four
+  notebooks executed in 5.510, 3.494, 4.331 and 3.855 seconds. Jupyter emitted
+  its expected local TCP-without-encryption warning.
+
+## Current state
+
+Extension Phases 11–20 are complete locally. The next external action is an
+intentional commit, push and production deployment, which requires explicit
+authorization because it changes the public repository and live URL.

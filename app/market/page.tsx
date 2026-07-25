@@ -38,16 +38,17 @@ export default function MarketPage() {
     finally { setSimLoading(false); }
   };
   const loading = prices.loading || recommendations.loading || policies.loading;
+  const error = prices.error || recommendations.error || policies.error;
   return (
     <>
       <PageHeader eyebrow="Market and hedge intelligence" title="Price uncertainty. Clear action." description="Convert a probabilistic net-position forecast into bounded hedge scenarios using explicit cost and risk assumptions." actions={<span className="badge origin-public">Public price reference</span>} />
-      <DataState loading={loading} error={prices.error || recommendations.error || policies.error} />
-      {!loading && <>
+      <DataState loading={loading} error={error} />
+      {!loading && !error && <>
         <section className="kpi-grid">
           <MetricCard label="Recommended quantile" value={`q${number(Number(active?.selected_quantile ?? active?.recommended_quantile) * 100, 0)}`} detail="Asymmetric cost-aware selection" tone="green" icon="flask" />
           <MetricCard label="Hedge volume" value={`${number(active?.recommended_hedge_mwh ?? active?.recommended_mwh, 2)} MWh`} detail="Operationally bounded recommendation" tone="blue" icon="market" />
           <MetricCard label="Expected short" value={`${number(active?.expected_short_exposure_mwh, 2)} MWh`} detail="Residual under-hedge exposure" tone="amber" icon="alert" />
-          <MetricCard label="Reference price" value={`${number(active?.reference_price_gbp_mwh ?? active?.market_reference_price_gbp_mwh, 2)} GBP/MWh`} detail="Public scenario proxy" icon="chart" />
+          <MetricCard label="Reference price" value={`${number(active?.reference_price_gbp_mwh ?? active?.market_reference_price_gbp_mwh, 2)} GBP/MWh`} detail="Public scenario proxy" icon="chart" origin="public" />
         </section>
         <section className="grid two" style={{ marginTop: 18 }}>
           <article className="card"><div className="card-head"><div><h3>Public system price snapshot</h3><p>Cached Elexon evidence · GBP/MWh</p></div></div><LineChart rows={prices.data?.data ?? []} unit="GBP/MWh" series={[{ key: 'systembuyprice', label: 'System price', color: '#d99a2b' }]} /></article>

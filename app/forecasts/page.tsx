@@ -18,11 +18,13 @@ export default function ForecastLabPage() {
   const rows = forecast.data?.data ?? [];
   const relevant = (metrics.data?.data ?? []).filter((row) => row.method === method);
   const net = relevant.find((row) => row.target === 'net');
+  const loading = forecast.loading || metrics.loading || attribution.loading;
+  const error = forecast.error || metrics.error || attribution.error;
   return (
     <>
       <PageHeader eyebrow="Forecast lab" title="Evidence before confidence." description="Compare temporal baselines, bottom-up estimators, direct portfolio models and coherent reconciled forecasts." actions={<label className="field">Forecast method<select value={method} onChange={(e) => setMethod(e.target.value)}><option value="baseline">Baseline</option><option value="bottom_up">Bottom up</option><option value="direct">Direct</option><option value="reconciled">Reconciled</option></select></label>} />
-      <DataState loading={forecast.loading || metrics.loading} error={forecast.error || metrics.error} onRetry={() => { forecast.reload(); metrics.reload(); }} />
-      {!forecast.loading && !forecast.error && <>
+      <DataState loading={loading} error={error} onRetry={() => { forecast.reload(); metrics.reload(); attribution.reload(); }} />
+      {!loading && !error && <>
         <section className="kpi-grid">
           <MetricCard label="Net MAE" value={`${number(net?.mae, 3)} MWh`} detail="Out-of-sample absolute error" tone="blue" icon="chart" />
           <MetricCard label="Net RMSE" value={`${number(net?.rmse, 3)} MWh`} detail="Large-error sensitivity" icon="flask" />

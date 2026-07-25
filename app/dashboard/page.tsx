@@ -25,19 +25,19 @@ export default function DashboardPage() {
   const expectedCost = hedgeRows.reduce((sum, row) => sum + Number(row.total_cost_gbp ?? 0), 0);
   const matchRate = matching.data?.data.analysis?.average_forecast_renewable_match_rate;
   const lowQuality = (sites.data?.data ?? []).filter((site) => site.quality_score < 98);
-  const loading = forecast.loading || matching.loading || hedge.loading;
-  const error = forecast.error || matching.error || hedge.error;
+  const loading = forecast.loading || matching.loading || hedge.loading || sites.loading;
+  const error = forecast.error || matching.error || hedge.error || sites.error;
   return (
     <>
       <PageHeader eyebrow="Portfolio control room" title="Tomorrow, in one view." description="Day-ahead portfolio outlook from saved reconciled forecasts, renewable allocations and hedge policy artifacts." actions={<span className="badge status-active">Live demo artifacts</span>} />
-      <DataState loading={loading} error={error} onRetry={() => { forecast.reload(); matching.reload(); hedge.reload(); }} />
+      <DataState loading={loading} error={error} onRetry={() => { forecast.reload(); matching.reload(); hedge.reload(); sites.reload(); }} />
       {!loading && !error && <>
         <section className="kpi-grid">
-          <MetricCard label="Tomorrow demand" value={`${number(totals.demand)} MWh`} detail="Reconciled day-ahead point forecast" tone="blue" icon="chart" />
+          <MetricCard label="Tomorrow demand" value={`${number(totals.demand)} MWh`} detail="Reconciled day-ahead point forecast" tone="blue" icon="chart" explanation={{ source: 'portfolio_forecasts.parquet', calculation: 'Sum of the first 48 reconciled demand point forecasts.', limitation: 'Simulated portfolio and realised-weather prototype proxy.' }} />
           <MetricCard label="Renewable generation" value={`${number(totals.generation)} MWh`} detail="Solar and wind portfolio output" tone="green" icon="bolt" />
           <MetricCard label="Net position" value={`${number(totals.net)} MWh`} detail={totals.net >= 0 ? 'Expected grid import' : 'Expected export'} icon="match" />
           <MetricCard label="Recommended hedge" value={`${number(recommended)} MWh`} detail="Sum of half-hourly recommendations" tone="amber" icon="market" />
-          <MetricCard label="Renewable match" value={percent(matchRate)} detail="Forecast local-preference coverage" tone="green" icon="match" />
+          <MetricCard label="Renewable match" value={percent(matchRate)} detail="Forecast local-preference coverage" tone="green" icon="match" explanation={{ source: 'matching/summary.json', calculation: 'Forecast matched renewable MWh divided by forecast demand MWh.', limitation: 'Commercial allocation, not physical grid routing.' }} />
           <MetricCard label="Forecast uncertainty" value={`${number(totals.width / Math.max(rows.length, 1), 2)} MWh`} detail="Mean net q10–q90 interval width" tone="blue" icon="flask" />
           <MetricCard label="Scenario cost" value={gbp(expectedCost)} detail="Modelled, not realised savings" tone="amber" icon="market" />
           <MetricCard label="Quality alerts" value={String(lowQuality.length)} detail={`${sites.data?.meta?.count ?? 0} sites monitored`} icon="alert" />

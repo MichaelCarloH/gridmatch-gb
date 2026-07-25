@@ -22,11 +22,13 @@ export default function MatchingPage() {
   const allocationRows = allocations.data?.data ?? [];
   const generatorIds = [...new Set(allocationRows.map((row) => String(row.generator_site_id)))].slice(0, 4);
   const consumerIds = [...new Set(allocationRows.map((row) => String(row.consumer_site_id)))].slice(0, 4);
+  const loading = summary.loading || periods.loading;
+  const error = summary.error || periods.error;
   return (
     <>
       <PageHeader eyebrow="Renewable allocation" title="Match every half-hour." description="Commercially allocate renewable generation to demand while preserving settlement-period conservation." actions={<><label className="field">Basis<select value={allocationType} onChange={(e) => setAllocationType(e.target.value)}><option value="realised">Realised</option><option value="forecast">Forecast</option></select></label><label className="field">Mode<select value={mode} onChange={(e) => setMode(e.target.value)}><option value="local_preference">Local preference</option><option value="maximum_match">Maximum match</option></select></label></>} />
-      <DataState loading={summary.loading || periods.loading} error={summary.error || periods.error} />
-      {!summary.loading && !summary.error && <>
+      <DataState loading={loading} error={error} empty={!loading && !error && !rows.length} />
+      {!loading && !error && !!rows.length && <>
         <section className="kpi-grid">
           <MetricCard label="Matched energy" value={`${number(selected?.matched_mwh, 2)} MWh`} detail={`Settlement period ${selected?.settlement_period ?? '—'}`} tone="green" icon="match" />
           <MetricCard label="Renewable coverage" value={percent(selected?.renewable_match_rate, 1)} detail="Demand served by allocation" tone="green" icon="bolt" />
@@ -38,7 +40,8 @@ export default function MatchingPage() {
           <aside className="card dark"><h3>Period control</h3><p className="muted">Slide through the GB settlement day.</p><label className="range-field" style={{ display: 'block', color: 'var(--ink)' }}><span style={{ display: 'flex', justifyContent: 'space-between' }}>Settlement period <b>{period}</b></span><input type="range" min="1" max="50" value={period} onChange={(e) => setPeriod(Number(e.target.value))} /></label><div className="rank-list" style={{ marginTop: 18 }}><div className="rank-row"><i>✓</i><span>Conservation check</span><b>{summary.data?.data.conservation_passed ? 'Passed' : 'Review'}</b></div><div className="rank-row"><i>↔</i><span>Mean match distance</span><b>{number(analysis?.average_realised_matching_distance_km)} km</b></div></div></aside>
         </section>
         <article className="card" style={{ marginTop: 18 }}><div className="card-head"><div><h3>Allocation matrix</h3><p>Generator → consumer matched MWh for period {period}</p></div><span className="badge status-active">{allocationRows.length} allocations</span></div>
-          {!allocationRows.length ? <DataState empty /> : <div className="allocation-matrix"><div className="matrix-head">Generator</div>{consumerIds.map((id) => <div className="matrix-head" key={id}>{id.replace('dem_', '')}</div>)}{generatorIds.flatMap((generator) => [<div className="matrix-head" key={`${generator}-name`}>{generator.replace('gen_', '')}</div>, ...consumerIds.map((consumer) => { const value = Number(allocationRows.find((row) => row.generator_site_id === generator && row.consumer_site_id === consumer)?.matched_mwh ?? 0); return <div className="heat" style={{ '--heat': `${Math.min(85, 12 + value * 180)}%` } as React.CSSProperties} key={`${generator}-${consumer}`}>{number(value, 3)}</div>; })])}</div>}
+          <DataState loading={allocations.loading} error={allocations.error} empty={!allocations.loading && !allocations.error && !allocationRows.length} />
+          {!allocations.loading && !allocations.error && !!allocationRows.length && <div className="allocation-matrix"><div className="matrix-head">Generator</div>{consumerIds.map((id) => <div className="matrix-head" key={id}>{id.replace('dem_', '')}</div>)}{generatorIds.flatMap((generator) => [<div className="matrix-head" key={`${generator}-name`}>{generator.replace('gen_', '')}</div>, ...consumerIds.map((consumer) => { const value = Number(allocationRows.find((row) => row.generator_site_id === generator && row.consumer_site_id === consumer)?.matched_mwh ?? 0); return <div className="heat" style={{ '--heat': `${Math.min(85, 12 + value * 180)}%` } as React.CSSProperties} key={`${generator}-${consumer}`}>{number(value, 3)}</div>; })])}</div>}
         </article>
         <div className="callout" style={{ marginTop: 18 }}><strong>Commercial matching, not physical routing</strong><p>Allocations are an accounting construct. Electricity continues to flow through the GB network according to physical constraints.</p></div>
       </>}

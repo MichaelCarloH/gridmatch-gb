@@ -24,3 +24,18 @@
 ## P2
 
 - [ ] Improve developer ergonomics and demo narrative after P0 acceptance criteria are met.
+
+## Extension pack
+
+- [x] Complete Extension Phase 11 shared multi-workspace product shell.
+- [x] Complete Extension Phase 12 business customer portal.
+- [x] Complete Extension Phase 13 renewable generator portal.
+- [x] Complete Extension Phase 14 portfolio and risk control room.
+- [x] Complete Extension Phase 15 diversification and portfolio lab.
+- [x] Complete Extension Phase 16 forecasting and model operations.
+- [x] Complete Extension Phase 17 onboarding, contracts and data operations.
+- [x] Complete Extension Phase 18 reports, explainability and guided demo.
+- [x] Complete Extension Phase 19 local integration and deployment audit.
+- [x] Complete Extension Phase 20 interview packaging and final audit.
+- [ ] Publish the completed extension changes only after explicit
+  commit/push/deployment authorization.

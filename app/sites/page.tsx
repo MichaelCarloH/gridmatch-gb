@@ -21,7 +21,7 @@ export default function SitesPage() {
   ), [resource.data, query, role, origin]);
   return (
     <>
-      <PageHeader eyebrow="Asset intelligence" title="Sites" description="Operational metadata, readiness, quality and modelling status for the demonstration portfolio." actions={<span className="badge status-active">{resource.data?.meta?.count ?? '—'} registered</span>} />
+      <PageHeader eyebrow="Asset intelligence" title="Sites" description="Operational metadata, readiness, quality and modelling status for the demonstration portfolio." actions={<span className="badge status-active">{resource.loading ? <span className="inline-skeleton" aria-label="Loading" /> : resource.error ? 'Unavailable' : `${resource.data?.meta?.count} registered`}</span>} />
       <div className="filter-row">
         <label className="field">Search<input type="search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Name, region or technology" /></label>
         <label className="field">Role<select value={role} onChange={(e) => setRole(e.target.value)}><option value="all">All roles</option><option value="demand">Demand</option><option value="generation">Generation</option></select></label>

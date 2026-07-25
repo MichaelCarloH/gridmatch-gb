@@ -1,4 +1,4 @@
-import { Icon } from './icon';
+import { EmptyState, ErrorState, LoadingSkeleton } from './states';
 
 export function DataState({
   loading,
@@ -12,17 +12,11 @@ export function DataState({
   onRetry?: () => void;
 }) {
   if (loading) {
-    return <div className="state-card"><span className="spinner" />Loading artifact data…</div>;
+    return <LoadingSkeleton />;
   }
   if (error) {
-    return (
-      <div className="state-card error-state">
-        <Icon name="alert" />
-        <div><strong>Data could not be loaded</strong><p>{error}</p></div>
-        {onRetry && <button className="button ghost" onClick={onRetry}>Retry</button>}
-      </div>
-    );
+    return <ErrorState message={error} onRetry={onRetry} />;
   }
-  if (empty) return <div className="state-card">No records match these filters.</div>;
+  if (empty) return <EmptyState />;
   return null;
 }

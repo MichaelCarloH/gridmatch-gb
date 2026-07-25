@@ -14,6 +14,7 @@ export default function MapPage() {
   const resource = useApi<GeoCollection>('/api/map/sites.geojson');
   const arcs = useApi<Envelope<Dictionary[]>>('/api/map/matching-arcs?settlement_period=1&allocation_type=realised&matching_mode=local_preference&minimum_matched_mwh=0.01&limit=200');
   const [publicFeatures, setPublicFeatures] = useState<GeoFeature[]>([]);
+  const [publicLoading, setPublicLoading] = useState(true);
   const [role, setRole] = useState('all');
   const [technology, setTechnology] = useState('all');
   const [region, setRegion] = useState('all');
@@ -45,7 +46,8 @@ export default function MapPage() {
           modelled: false
         }
       }))))
-      .catch(() => setPublicFeatures([]));
+      .catch(() => setPublicFeatures([]))
+      .finally(() => setPublicLoading(false));
     return () => controller.abort();
   }, []);
   const all = useMemo(() => [...(resource.data?.features ?? []), ...publicFeatures], [resource.data, publicFeatures]);
@@ -65,9 +67,10 @@ export default function MapPage() {
     features.find((feature) => feature.properties.site_id === selected) ??
     features[0];
   const site = selectedFeature?.properties;
+  const loading = resource.loading || publicLoading;
   return (
     <>
-      <PageHeader eyebrow="Great Britain asset view" title="Generation meets demand." description="Modelled business and renewable sites, with public REPD evidence available as the wider research layer." actions={<span className="badge status-active">{features.length} visible sites</span>} />
+      <PageHeader eyebrow="Great Britain asset view" title="Generation meets demand." description="Modelled business and renewable sites, with public REPD evidence available as the wider research layer." actions={<span className="badge status-active">{loading ? <span className="inline-skeleton" aria-label="Loading" /> : `${features.length} visible sites`}</span>} />
       <div className="filter-row">
         <label className="field">Technology<select value={technology} onChange={(e) => setTechnology(e.target.value)}><option value="all">All technologies</option>{technologies.map((v) => <option key={v}>{v}</option>)}</select></label>
         <label className="field">Role<select value={role} onChange={(e) => setRole(e.target.value)}><option value="all">All roles</option><option value="demand">Demand</option><option value="generation">Generation</option></select></label>
@@ -77,7 +80,7 @@ export default function MapPage() {
         <label className="field">Modelled<select value={modelled} onChange={(e) => setModelled(e.target.value)}><option value="all">All assets</option><option value="yes">Modelled portfolio</option><option value="no">Public research layer</option></select></label>
         <label className="field">Alert state<select value={alertsOnly ? 'alerts' : 'all'} onChange={(e) => setAlertsOnly(e.target.value === 'alerts')}><option value="all">All states</option><option value="alerts">Needs attention</option></select></label>
       </div>
-      <DataState loading={resource.loading} error={resource.error} empty={!resource.loading && !features.length} onRetry={resource.reload} />
+      <DataState loading={loading} error={resource.error} empty={!loading && !features.length} onRetry={resource.reload} />
       {!!features.length && <section className="split">
         <GBMap features={features} arcs={arcs.data?.data ?? []} selected={site?.site_id} onSelect={setSelected} />
         {site && <aside className="card site-inspector">

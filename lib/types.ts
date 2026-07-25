@@ -6,6 +6,7 @@ export type Envelope<T> = {
     offset?: number;
     units?: unknown;
     method?: string | null;
+    delivery_mode?: 'api' | 'static';
   };
   warnings?: string[];
 };
@@ -55,6 +56,11 @@ export type PortfolioMetric = {
   rmse: number;
   bias: number;
   interval_coverage: number | null;
+  interval_width?: number | null;
+  nmae?: number;
+  peak_error?: number;
+  pinball_loss?: number | null;
+  evaluation_rows?: number;
   simulated_hedge_cost_gbp: number;
 };
 
@@ -108,3 +114,12 @@ export type ModelRecord = {
 };
 
 export type Dictionary = Record<string, any>;
+
+export type HealthStatus = {
+  status: 'healthy' | 'degraded';
+  application_version: string;
+  artifact_availability: Record<string, boolean>;
+  model_registry_available: boolean;
+  demo_mode: boolean;
+  last_artifact_update: string | null;
+};

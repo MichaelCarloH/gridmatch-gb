@@ -1,104 +1,118 @@
 # Architecture
 
-## Current boundary
-
-GridMatch separates the presentation shell (`app/`, `components/`, `lib/`),
-the HTTP boundary (`api/`), reusable research/domain logic
-(`src/gridmatch/`), offline build scripts (`scripts/`) and generated
-artifacts (`data/`, `artifacts/`).
-
-The product follows this request path:
+## System boundary
 
 ```text
-Next.js product route
-→ shared client hook
-→ typed HTTP client
-→ FastAPI route
+Next.js workspace route
+→ shared typed API client
+→ FastAPI route and Pydantic boundary
 → domain service
-→ allowlisted artifact repository / saved-model cache
+→ allowlisted artifact repository / bounded model cache
 → Parquet, JSON, Markdown or Joblib artifact
 ```
 
-Route handlers parse bounded inputs and select response schemas. Services own
-filtering, business rules, conservation checks and lightweight inference.
-The artifact repository owns approved logical paths, lazy reads,
-modification-aware cache invalidation and bounded least-recently-used caching.
-No endpoint accepts a filesystem path.
-
-## Frontend product
-
-`app/` contains ten P0 product routes: landing, dashboard, GB map, sites,
-site detail, forecast lab, matching, market, research and reports.
-`components/` contains the responsive application shell, units-aware SVG
-charts, the GB projection and shared loading/error/empty states. `lib/`
-contains the runtime API boundary, display types and Europe/London-aware
-formatting.
-
-The browser reads the Phase 10 API at
-same-origin `/api/*` paths, which Next.js rewrites locally to
-`GRIDMATCH_API_INTERNAL_URL` (default `http://127.0.0.1:8000`). A public
-`NEXT_PUBLIC_GRIDMATCH_API_URL` override is reserved for deliberately
-split-host deployments. On Vercel, `/api/*` is served by the bundled FastAPI
-function. Public REPD map evidence is exported as a static
-GeoJSON research layer; portfolio sites, matching arcs and all decision
-metrics come from bounded API endpoints. `npm run dev` starts both FastAPI and
-Next.js and terminates them together.
-No frontend route trains a model, runs a backtest or downloads external data.
-
-## API package
+In public fallback mode, the API-client step resolves the same response
+envelopes from indexed JSON bundles:
 
 ```text
-api/
-├── index.py                 application factory, CORS and routers
-├── dependencies.py          typed environment configuration
-├── errors.py                stable error envelopes
-├── schemas/                 public Pydantic requests/responses
-├── routes/                  thin HTTP handlers
-└── services/
-    ├── artifact_repository.py
-    ├── site_service.py
-    ├── portfolio_service.py
-    ├── matching_service.py
-    ├── market_service.py
-    ├── upload_service.py
-    ├── research_service.py
-    └── model_service.py
+Next.js workspace route
+→ canonical API path
+→ public/demo-data/fallback/index.json
+→ bounded bundle response
 ```
 
-## Serving behaviour
+No browser or API request accepts a filesystem path, downloads source data,
+trains a model or runs a portfolio backtest.
 
-- Required artifacts are inspected when the app is created. `/health` is
-  `degraded`, never `healthy`, if any required P0 artifact is missing.
-- Parquet and JSON reads are lazy. Cached entries are reused until file
-  modification time changes and the configured cache remains bounded.
-- Response rows and query limits are bounded. Observations and 19,024 matching
-  arcs are never returned wholesale by default.
-- CSV uploads are size- and content-type checked, decoded as UTF-8, validated
-  in memory and not retained.
-- Compact prediction reconstructs the documented site feature vector and
-  loads existing Joblib estimators. It enforces GB settlement alignment,
-  quantile ordering and physical constraints.
-- Hedge simulation calls the Phase 9 single-scenario function. It does not run
-  a historical backtest.
-- Notebook and model paths returned publicly are allowlisted relative links or
-  logical `model://` identifiers.
+## Repository layers
 
-## Offline-only work
+- `app/`: 50 App Router pages, including six workspaces and legacy technical
+  evidence routes.
+- `components/layout/`: persisted workspace shell, navigation, breadcrumbs,
+  disclosures and artifact status.
+- `components/workspaces/`: audience product logic for business, generator,
+  operations, diversification, models, admin, demo and reports.
+- `components/ui/` and `components/charts/`: traceable KPI explanations,
+  loading/error/empty states, accessible charts and print/report primitives.
+- `lib/`: typed API and fallback clients, formatting, settlement display,
+  deterministic scenario definitions and browser upload validation.
+- `api/routes/`: bounded HTTP parsing and public response schemas.
+- `api/services/`: site, portfolio, matching, market, upload, research and
+  saved-model business logic.
+- `src/gridmatch/`: reusable data, validation, features, forecasting, matching
+  and hedge logic shared by scripts and API services.
+- `scripts/`: offline collection, builds, training, notebook execution,
+  fallback generation and benchmarks.
+- `data/` and `artifacts/`: generated, governed runtime evidence.
 
-Public-data collection, demo generation, validation artifact generation,
-notebook execution, model training, portfolio backtests, renewable-allocation
-builds, hedge backtests and model-registry creation remain command-line build
-steps. They are never triggered by HTTP requests.
+## Workspace model
 
-## Configuration and deployment
+The shared shell persists one of six perspectives:
 
-The API reads `GRIDMATCH_DATA_DIR`, `GRIDMATCH_ARTIFACT_DIR`,
-`GRIDMATCH_DEMO_MODE`, `GRIDMATCH_CORS_ORIGINS`,
-`GRIDMATCH_MAX_RESPONSE_ROWS`, `GRIDMATCH_MODEL_CACHE_SIZE` and
-`GRIDMATCH_UPLOAD_MAX_BYTES`. Demo mode needs no credentials and makes no
-network request. CORS has no wildcard default; local development allows only
-`http://localhost:3000`.
+- Business: consumption, renewable coverage, residual exposure and actions.
+- Generator: output, commercial offtake, performance and scenario value.
+- Operations: half-hour position, matching, risk and deterministic scenarios.
+- Models: hierarchy, performance, calibration, registry, incidents and drift.
+- Research: executed notebooks, model cards and source lineage.
+- Admin: non-persistent onboarding, simulated contracts and data validation.
 
-The current application is a local prototype. Authentication, production
-object storage, distributed caching, observability, rate limiting, Phase 12
-QA and deployment are later-phase concerns.
+The perspectives do not duplicate model outputs. They interpret the same site,
+forecast, matching, market, quality and registry artifacts.
+
+## Quantitative flow
+
+```text
+Meter observations
+→ DST-safe settlement validation and quality flags
+→ weather and calendar features
+→ site point + q10/q50/q90 forecasts
+→ bottom-up and direct portfolio forecasts
+→ coherent reconciled demand / generation / net
+→ same-half-hour renewable allocation
+→ residual requirement
+→ scenario procurement recommendation
+→ planned-versus-realised reconciliation
+→ audience reports
+```
+
+Site observations remain auditable when invalid: validators add flags and
+reports rather than silently deleting rows. GB settlement conversion supports
+spring 46-period, normal 48-period and autumn 50-period days.
+
+## Serving and safety
+
+- Artifact availability is checked at startup and exposed through `/health`.
+- Parquet/JSON reads are lazy, modification-aware and bounded.
+- Query limits and pagination prevent wholesale observations or allocation
+  responses.
+- Saved-model inference enforces timezone, settlement alignment, quantile
+  ordering and physical limits.
+- CSV uploads are size/type checked, validated in memory and not retained.
+- Scenario endpoints call lightweight existing functions only.
+- Public notebook links and model paths are allowlisted or logical IDs.
+- Planned, realised and scenario values remain separately labelled.
+
+## Deployment modes
+
+### Public demo
+
+Next.js reads 116 generated static response views. This mode has no Python
+runtime dependency and works on Vercel's static product surface.
+
+### Local technical mode
+
+`npm run dev` starts Next.js at port 3000 and FastAPI at port 8000. OpenAPI,
+upload validation and compact saved-model inference are available.
+
+### Combined deployed API
+
+`vercel.json` packages the bounded FastAPI function and required runtime
+artifacts. This mode should be retained only while platform bundle and duration
+limits remain stable.
+
+## Deferred production controls
+
+Authentication, authorization, private object storage, legal contract
+execution, billing, payments, live trade execution, distributed tracing,
+rate limiting, a feature store and automated model promotion are outside the
+prototype. See `LIMITATIONS.md`.

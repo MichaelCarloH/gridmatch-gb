@@ -14,7 +14,8 @@ export default function ReportsPage() {
   const policies = useApi<Envelope<Dictionary[]>>('/api/market/policy-summary');
   const metrics = useApi<Envelope<PortfolioMetric[]>>('/api/portfolio/metrics?method=reconciled');
   const sites = useApi<Envelope<Site[]>>('/api/sites?limit=100');
-  const loading = matching.loading || consumers.loading || policies.loading || metrics.loading;
+  const loading = matching.loading || consumers.loading || generators.loading || policies.loading || metrics.loading || sites.loading;
+  const error = matching.error || consumers.error || generators.error || policies.error || metrics.error || sites.error;
   const analysis = matching.data?.data.analysis;
   const policy = policies.data?.data.find((row) => row.policy === 'validation_optimised') ?? policies.data?.data[0];
   const netMetric = metrics.data?.data.find((row) => row.target === 'net');
@@ -30,8 +31,8 @@ export default function ReportsPage() {
   return (
     <>
       <PageHeader eyebrow="Operational reporting" title="Evidence that travels." description="Procurement, renewable matching, performance and readiness summaries derived from the same governed artifacts." actions={<button className="button ghost" onClick={() => window.print()}>Print report view</button>} />
-      <DataState loading={loading} error={matching.error || consumers.error || policies.error || metrics.error} />
-      {!loading && <>
+      <DataState loading={loading} error={error} />
+      {!loading && !error && <>
         <section className="grid three">
           {reports.map(([title, icon, value, detail]) => <article className="card report-card" key={title}><span className="metric-icon"><Icon name={icon} /></span><strong>{value}</strong><p>{title}</p><footer><span>{detail}</span><span>Artifact-backed</span></footer></article>)}
         </section>
